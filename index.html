@@ -5,7 +5,7 @@
 			body {
 				background:#aaa;	
 			}
-			#bcCanvas {
+			#zombieRunner {
 				background:#000;
 				display:block;
 				position:relative;
@@ -15,16 +15,16 @@
 		</style>
 	</head>
 	<body>
-		<canvas id="bcCanvas" width="500" height="300">
+		<canvas id="zombieRunner" width="500" height="500">
 			<p>Your browser is out of date. Please get a <a href="http://browsehappy.com/">modern browser</a> so you can enjoy all this canvasy goodness.</p>
 		</canvas>
-		<script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
-		<script src="runner.js"></script>
-		<script src="runnerApp.js"></script>
-		<script>
-			window.onload = function(){
-				new runnerApp("bcCanvas"); // Kicking off the app.
-			};
-		</script>
+		<!-- All CreateJS Libraries -->
+		<!--<script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>-->
+		<!-- Or maybe just the drawing library. -->
+		<!--<script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>-->
+		<!--<script src="runner.js"></script>-->
+		<script src="slider.js"></script>
+		<script src="segment.js"></script>
+		<script src="zombieRunnerApp.js"></script>
 	</body>
 </html>
