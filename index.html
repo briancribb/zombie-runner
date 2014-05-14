@@ -1,0 +1,30 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<style>
+			body {
+				background:#aaa;	
+			}
+			#bcCanvas {
+				background:#000;
+				display:block;
+				position:relative;
+				margin: 40px auto 0px auto;
+				border: 2px solid #ddd;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="bcCanvas" width="500" height="300">
+			<p>Your browser is out of date. Please get a <a href="http://browsehappy.com/">modern browser</a> so you can enjoy all this canvasy goodness.</p>
+		</canvas>
+		<script src="http://code.createjs.com/createjs-2013.12.12.min.js"></script>
+		<script src="runner.js"></script>
+		<script src="runnerApp.js"></script>
+		<script>
+			window.onload = function(){
+				new runnerApp("bcCanvas"); // Kicking off the app.
+			};
+		</script>
+	</body>
+</html>
