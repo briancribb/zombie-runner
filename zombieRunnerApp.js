@@ -1,11 +1,6 @@
 var zombieRunnerApp = function(){
 	console.log('zombieRunnerApp()');
-	var theCanvas = document.getElementById("zombieRunner");
-	var context = theCanvas.getContext("2d"),
-	segment0 = new Segment(100, 20),
-	segment1 = new Segment(200, 10),
-	segment2 = new Segment(80, 40);
-	 
+
 	// Setting up rAF. Thank you Paul Irish.
 	window.requestAnimFrame = (function(){
 		return  window.requestAnimationFrame	|| 
@@ -18,37 +13,52 @@ var zombieRunnerApp = function(){
 		};
 	})();
 
-	//var i = 0;
+
+	// Variables
+	var canvas = document.getElementById("zombieRunner");
+	var context = canvas.getContext("2d"),
+	segment0 = new Segment(100, 20),
+	segment1 = new Segment(100, 20);
+	slider0 = new Slider(-90,90,0),
+	slider1 = new Slider(-90,90,0),
+
+	// Initialization
+	segment0.x = 100;
+	segment0.y = 100;
+
+	slider0.x = 320;
+	slider0.y = 20;
+	slider0.captureMouse(canvas);
+	slider0.onchange = animloop; // Only changing when the slider changes.
+
+	slider1.x = 340;
+	slider1.y = 20;
+	slider1.captureMouse(canvas);
+	slider1.onchange = animloop; // Only changing when the slider changes.
+
+
 	function animloop(){
+		console.log('animloop()');
 		requestAnimFrame(animloop);
-		//if ( canvasParent.is(':visible') ) {
-		//	drawCanvas();
-			//console.log('animloop(): Doing the loop.');
-		//} //else{
-			//console.log('animloop(): Stopping the loop.');
-		//}
-		//console.log('Animation frame: ' + i);
-		//i++;
+		drawFrame();
 	}
 
 	// Let's kick off the animation.
-	animloop();
-
-
-	segment0.x = 100;
-	segment0.y = 50;
-	segment0.draw(context);
-	segment1.x = 100;
-	segment1.y = 80;
-	segment1.draw(context);
-	segment2.x = 100;
-	segment2.y = 120;
-	segment2.draw(context);
-
 	//animloop();
-	//var drawCanvas = function() {
-		
-	//}
+
+	var drawFrame = function() {
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		segment0.rotation = slider0.value * Math.PI / 180;
+		segment1.rotation = slider1.value * Math.PI / 180;
+		segment1.x = segment0.getPin().x;
+		segment1.y = segment0.getPin().y;
+
+		segment0.draw(context);
+		segment1.draw(context);
+		slider0.draw(context);
+		slider1.draw(context);
+	}
+	drawFrame(); // initial display call.
 
 }; zombieRunnerApp();
 
