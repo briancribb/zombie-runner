@@ -21,7 +21,7 @@ var zombieRunnerApp = function(){
 		segment1 = new Segment(50, 10),
 		segment2 = new Segment(50, 15),
 		segment3 = new Segment(50, 10),
-		speedSlider = new Slider(0, 0.2, 0.08),
+		speedSlider = new Slider(0, 0.2, 0.11),
 		thighRangeSlider = new Slider(0, 90, 45),
 		thighBaseSlider = new Slider(0, 180, 90),
 		calfRangeSlider = new Slider(0, 90, 45),
@@ -75,7 +75,8 @@ var zombieRunnerApp = function(){
 
 	function walk(segA, segB, cyc) {
 		var angle0 = (Math.sin(cyc) * thighRangeSlider.value + thighBaseSlider.value) * Math.PI / 180,
-			angle1 = (Math.sin(cyc + calfOffsetSlider.value) * calfRangeSlider.value + calfRangeSlider.value) * Math.PI / 180;
+			angle1 = (Math.sin(cyc + calfOffsetSlider.value) * calfRangeSlider.value + calfRangeSlider.value) * Math.PI / 180,
+			foot = segB.getPin();
 
 		//var angle0 = (Math.sin(cyc) * 45 + 80) * Math.PI / 180,
 		//	angle1 = (Math.sin(cyc + offset) * 45 + 45) * Math.PI / 180;
@@ -84,6 +85,8 @@ var zombieRunnerApp = function(){
 		segB.rotation = segA.rotation + angle1;
 		segB.x = segA.getPin().x;
 		segB.y = segA.getPin().y;
+		segB.vx = segB.getPin().x - foot.x;
+		segB.vy = segB.getPin().y - foot.y;
 	}
 	function setVelocity() {
 		vy += gravitySlider.value;
@@ -101,6 +104,22 @@ var zombieRunnerApp = function(){
 			segment1.y -= dy;
 			segment2.y -= dy;
 			segment3.y -= dy;
+			vx -= seg.vx;
+			vy -= seg.vy;
+		}
+	}
+	function checkWalls() {
+		var w = canvas.width + 200;
+		if (segment0.x > canvas.width + 100) {
+			segment0.x -= w;
+			segment1.x -= w;
+			segment2.x -= w;
+			segment3.x -= w;
+		} else if (segment0.x < -100) {
+			segment0.x += w;
+			segment1.x += w;
+			segment2.x += w;
+			segment3.x += w;
 		}
 	}
 
@@ -128,6 +147,9 @@ var zombieRunnerApp = function(){
 		segment1.draw(context);
 		segment2.draw(context);
 		segment3.draw(context);
+		checkWalls();
+
+		vx = 0;
 
 		speedSlider.draw(context);
 		thighRangeSlider.draw(context);
@@ -135,6 +157,13 @@ var zombieRunnerApp = function(){
 		calfRangeSlider.draw(context);
 		calfOffsetSlider.draw(context);
 		gravitySlider.draw(context);
+
+		context.fillText( ('speedSlider:      ' + speedSlider.value), 200,20);
+		context.fillText( ('thighRangeSlider: ' + thighRangeSlider.value), 200,35);
+		context.fillText( ('thighBaseSlider:  ' + thighBaseSlider.value), 200,50);
+		context.fillText( ('calfRangeSlider:  ' + calfRangeSlider.value), 200,65);
+		context.fillText( ('calfOffsetSlider: ' + calfOffsetSlider.value), 200,80);
+		context.fillText( ('gravitySlider:    ' + gravitySlider.value), 200,95);
 	}
 	animloop(); // initial display call.
 
@@ -143,6 +172,36 @@ var zombieRunnerApp = function(){
 
 
 
-	// ====================
-	// SEGMENT CLASS
-	// ====================
+// ====================
+// RUNNING SETTINGS
+// ====================
+
+//  FAST JOG
+//	speedSlider:		.11
+//	thighRangeSlider:	45
+//	thighBaseSlider:	90
+//	calfRangeSlider:	45
+//	calfOffsetSlider:	-1.57
+//	gravitySlider:   	.2
+
+
+//  WALK
+//	speedSlider:		.6
+//	thighRangeSlider:	23
+//	thighBaseSlider:	90
+//	calfRangeSlider:	17
+//	calfOffsetSlider:	-1.57
+//	gravitySlider:   	.2
+
+
+
+
+
+
+
+
+
+
+
+
+
