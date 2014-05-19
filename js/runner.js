@@ -137,7 +137,7 @@ Runner.prototype.run = function (elapsed) {
 		segB.rotation = segA.rotation + angle1;
 		segB.x = segA.getPin().x;
 		segB.y = segA.getPin().y;
-		console.log('console.log(Math.sin(cyc)) = ' + Math.sin(cyc));
+		//console.log('console.log(Math.sin(cyc)) = ' + Math.sin(cyc));
 	}
 
 }
@@ -145,6 +145,9 @@ Runner.prototype.run = function (elapsed) {
 
 
 Runner.prototype.draw = function (context) {
+	//context.save();
+	//context.translate(this.x, this.y);
+	//context.scale(.5, .5);
 	this.legBack0.draw(this.context);
 	this.legBack1.draw(this.context);
 	this.armBack0.draw(this.context);
@@ -154,5 +157,6 @@ Runner.prototype.draw = function (context) {
 	this.legFront1.draw(this.context);
 	this.armFront0.draw(this.context);
 	this.armFront1.draw(this.context);
+	//context.restore();
 }
 

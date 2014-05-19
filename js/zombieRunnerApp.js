@@ -60,7 +60,7 @@ var zombieRunnerApp = function(){
 	var render = function() {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		context.fillText( ('FPS:    ' + fps), 10,20);
-		runner5.draw();
+		runner5.draw(context);
 		//runner6.draw();
 		//runner7.draw();
 		//runner8.draw();
