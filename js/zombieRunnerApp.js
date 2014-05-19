@@ -25,19 +25,11 @@ var zombieRunnerApp = function(){
 		elapsed = 0,
 		frame_count = 0,
 		fps = 0,
-		runner5 = new Runner({context:context,x:200,y:200});
-
-
-
-
-
-
-
-
-
-
-
-
+		runner5 = new Runner({context:context,x:100,y:200});
+		//runner6 = new Runner({context:context,x:300,y:200});
+		//runner7 = new Runner({context:context,x:500,y:200});
+		//runner8 = new Runner({context:context,x:700,y:200});
+		//runner10 = new Runner({context:context,x:900,y:200});
 
 
 
@@ -57,13 +49,22 @@ var zombieRunnerApp = function(){
 			frame_count -= 1000;
 			fps = parseInt(1000 / elapsed);
 		}
-		runner5.run('run', elapsed);
+		runner5.run(elapsed);
+		//runner5.x++;
+		//runner6.run(elapsed);
+		//runner7.run(elapsed);
+		//runner8.run(elapsed);
+		//runner10.run(elapsed);
 	}
 
 	var render = function() {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		context.fillText( ('FPS:    ' + fps), 10,20);
 		runner5.draw();
+		//runner6.draw();
+		//runner7.draw();
+		//runner8.draw();
+		//runner10.draw();
 	}
 	render(); // initial display call.
 

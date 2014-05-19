@@ -5,14 +5,14 @@ function Torso (width, height, color) {
 	this.height = height;
 	this.vx = 0;
 	this.vy = 0;
-	this.rotation = 0;
+	this.rotation = -(Math.PI/180)*70;
 	this.scaleX = 1;
 	this.scaleY = 1;
 	this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.lineWidth = 1;
 }
 
-Segment.prototype.draw = function (context) {
+Torso.prototype.draw = function (context) {
 	var h = this.height,
 			d = this.width + h, //top-right diagonal
 			cr = h / 2;         //corner radius
@@ -51,7 +51,7 @@ Segment.prototype.draw = function (context) {
 	context.restore();
 };
 
-Segment.prototype.getPin = function () {
+Torso.prototype.getPin = function () {
 	return {
 		x: this.x + Math.cos(this.rotation) * this.width,
 		y: this.y + Math.sin(this.rotation) * this.width
