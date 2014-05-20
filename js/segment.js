@@ -9,7 +9,7 @@ function Segment (width, height, color) {
 	this.scaleX = 1;
 	this.scaleY = 1;
 	this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
-	this.lineWidth = 1;
+	this.lineWidth = 0;
 }
 
 Segment.prototype.draw = function (context) {
@@ -37,6 +37,7 @@ Segment.prototype.draw = function (context) {
 	if (this.lineWidth > 0) {
 		context.stroke();
 	}
+	/*
 	//draw the 2 "pins"
 	context.beginPath();
 	context.arc(0, 0, 2, 0, (Math.PI * 2), true);
@@ -47,7 +48,7 @@ Segment.prototype.draw = function (context) {
 	context.arc(this.width, 0, 2, 0, (Math.PI * 2), true);
 	context.closePath();
 	context.stroke();
-
+	*/
 	context.restore();
 };
 

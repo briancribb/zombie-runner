@@ -1,4 +1,5 @@
 function Head (width, height, color) {
+	var self = this;
 	this.x = 0;
 	this.y = 0;
 	this.width = width;
@@ -10,23 +11,30 @@ function Head (width, height, color) {
 	this.scaleY = 1;
 	this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.lineWidth = 1;
+	this.graphics = {
+		plain	:	function(context) {
+			context.save();
+			context.translate(self.x, self.y);
+			context.rotate(self.rotation);
+			context.scale(self.scaleX, self.scaleY);
+			context.lineWidth = self.lineWidth;
+			context.fillStyle = self.color;
+
+			context.beginPath();
+			context.arc(self.width, 0, self.width, 0, (Math.PI * 2), true);
+			//context.arc(self.width, 0, self.width, 0, (Math.PI/180)*60, true);
+			//context.arc(self.width, 0, self.width, 0, (Math.PI/180)*30, true);
+			//context.arc(self.width, 0, self.width, 0, (Math.PI/180)*300, true);
+			//context.closePath();
+			context.stroke();
+			context.fill();
+			context.restore();
+		}
+	}
 }
 
 Head.prototype.draw = function (context) {
-
-	context.save();
-	context.translate(this.x, this.y);
-	context.rotate(this.rotation);
-	context.scale(this.scaleX, this.scaleY);
-	context.lineWidth = this.lineWidth;
-	context.fillStyle = this.color;
-
-	context.beginPath();
-	context.arc(this.width, 0, this.width, 0, (Math.PI * 2), true);
-	context.closePath();
-	context.stroke();
-
-	context.restore();
+	this.graphics.plain(context);
 };
 
 Head.prototype.getPin = function () {

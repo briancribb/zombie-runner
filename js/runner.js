@@ -3,7 +3,6 @@ var classes = classes || {}; // Giving a namespace to the class we're creating. 
 Runner = function(settings) {
 	console.log("I'm a runner!");
 	this.counter = 0;
-	this.context = settings.context;
 	this.x = settings.x;
 	this.y = settings.y;
 	this.speed = 0;
@@ -12,18 +11,18 @@ Runner = function(settings) {
 	//this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.legProps = {};
 
-	this.head = new Head(15, 15, '#dddddd'),
-	this.torso = new Segment(55, 25, '#dddddd'),
+	this.head = new Head(15, 15, '#555555'),
+	this.torso = new Torso(55, 25, '#555555'),
 
-	this.legBack0 = new Segment(50, 15, '#dddddd'),
-	this.legBack1 = new Segment(50, 10, '#dddddd'),
-	this.legFront0 = new Segment(50, 15),
-	this.legFront1 = new Segment(50, 10);
+	this.legBack0 = new Segment(50, 20, '#333333'),
+	this.legBack1 = new Segment(50, 20, '#333333'),
+	this.legFront0 = new Segment(50, 20, '#555555'),
+	this.legFront1 = new Segment(50, 20, '#555555'),
 
-	this.armBack0 = new Segment(38, 10, '#dddddd'),
-	this.armBack1 = new Segment(38, 8, '#dddddd'),
-	this.armFront0 = new Segment(38, 10),
-	this.armFront1 = new Segment(38, 8);
+	this.armBack0 = new Segment(38, 15, '#333333'),
+	this.armBack1 = new Segment(38, 15, '#333333'),
+	this.armFront0 = new Segment(38, 15, '#777777'),
+	this.armFront1 = new Segment(38, 15, '#777777');
 
 
 
@@ -31,9 +30,11 @@ Runner = function(settings) {
 	this.head.x = this.torso.getPin().x + 6;
 	this.head.y = this.torso.getPin().y - 18;
 
+	// Torso
 	this.torso.x = this.x;
 	this.torso.y = this.y;
 	this.torso.rotation = -(Math.PI/180)*70;
+
 	// Back Leg
 	this.legBack0.x = this.torso.x;
 	this.legBack0.y = this.torso.y;
@@ -84,6 +85,8 @@ Runner = function(settings) {
 
 }
 
+
+
 Runner.prototype.run = function (elapsed) {
 	//console.log('run(): cycle = ' + this.cycle);
 	this.counter ++;
@@ -110,8 +113,11 @@ Runner.prototype.run = function (elapsed) {
 	this.head.x = this.torso.getPin().x + 6;
 	this.head.y = this.torso.getPin().y - 18;
 
+	// Torso
 	this.torso.x = this.x;
 	this.torso.y = this.y;
+	this.torso.rotation = -(Math.PI/180)*70;
+
 
 	// Back Leg
 	this.legBack0.x = this.torso.x - hipSlide;
@@ -128,7 +134,6 @@ Runner.prototype.run = function (elapsed) {
 	// Front arm
 	this.armFront0.x = this.torso.getPin().x - shoulderSlide;
 	this.armFront0.y = this.torso.getPin().y;
-
 
 
 
@@ -165,16 +170,16 @@ Runner.prototype.draw = function (context) {
 	//context.save();
 	//context.translate(this.x, this.y);
 	//context.scale(.5, .5);
-	this.legBack0.draw(this.context);
-	this.legBack1.draw(this.context);
-	this.armBack0.draw(this.context);
-	this.armBack1.draw(this.context);
-	this.torso.draw(this.context);
-	this.head.draw(this.context);
-	this.legFront0.draw(this.context);
-	this.legFront1.draw(this.context);
-	this.armFront0.draw(this.context);
-	this.armFront1.draw(this.context);
-	//context.restore();
+	this.legBack0.draw(context);
+	this.legBack1.draw(context);
+	this.armBack0.draw(context);
+	this.armBack1.draw(context);
+	this.torso.draw(context);
+	this.head.draw(context);
+	this.legFront0.draw(context);
+	this.legFront1.draw(context);
+	this.armFront0.draw(context);
+	this.armFront1.draw(context);
+
 }
 
