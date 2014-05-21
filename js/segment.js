@@ -22,6 +22,9 @@ Segment.prototype.draw = function (context) {
 	context.scale(this.scaleX, this.scaleY);
 	context.lineWidth = this.lineWidth;
 	context.fillStyle = this.color;
+
+
+	/*
 	context.beginPath();
 	context.moveTo(0, -cr);
 	context.lineTo(d-2*cr, -cr);
@@ -34,21 +37,35 @@ Segment.prototype.draw = function (context) {
 	context.quadraticCurveTo(-cr, -cr, 0, -cr);
 	context.closePath();
 	context.fill();
+	*/
+
+	context.beginPath();
+	context.moveTo(0, -cr);
+	context.lineTo(d-h, -cr);
+	context.lineTo(d-h, cr);
+	context.lineTo(0, cr);
+	context.lineTo(0, -cr);
+	context.closePath();
+	context.fill();
+
+
 	if (this.lineWidth > 0) {
 		context.stroke();
 	}
-	/*
+
 	//draw the 2 "pins"
-	context.beginPath();
-	context.arc(0, 0, 2, 0, (Math.PI * 2), true);
-	context.closePath();
-	context.stroke();
 
 	context.beginPath();
-	context.arc(this.width, 0, 2, 0, (Math.PI * 2), true);
+	context.arc(0, 0, cr, 0, (Math.PI * 2), true);
 	context.closePath();
-	context.stroke();
-	*/
+	context.fill();
+
+	context.beginPath();
+	context.arc(this.width, 0, cr, 0, (Math.PI * 2), true);
+	context.closePath();
+	context.fill();
+
+
 	context.restore();
 };
 

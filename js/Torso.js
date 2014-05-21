@@ -23,15 +23,15 @@ Torso.prototype.draw = function (context) {
 	context.lineWidth = this.lineWidth;
 	context.fillStyle = this.color;
 	context.beginPath();
-	context.moveTo(30, -cr);									// Start above zero point.
+	context.moveTo(20, -cr);									// Start above zero point.
 	context.lineTo(d-2*cr, -cr);								// Straight right.
 	context.quadraticCurveTo(-cr+d, -cr, -cr+d, 0);				// Curve down on right.
 	context.lineTo(-cr+d, h-2*cr);								// Straignt down.
 	context.quadraticCurveTo(-cr+d, -cr+h, d-2*cr, -cr+h);		// Curve down and left.
-	context.lineTo(30, -cr+h);									// Straight left.
-	context.quadraticCurveTo(-cr+30, -cr+h, -cr+30, h-2*cr);		// Curve left and up.
-	context.lineTo(-cr+30, 0);									// Straight up.
-	context.quadraticCurveTo(-cr+30, -cr, 30, -cr);				// Curve up and right.
+	context.lineTo(20, -cr+h);									// Straight left.
+	context.quadraticCurveTo(-cr+20, -cr+h, -cr+20, h-2*cr);	// Curve left and up.
+	context.lineTo(-cr+20, 0);									// Straight up.
+	context.quadraticCurveTo(-cr+20, -cr, 20, -cr);				// Curve up and right.
 	context.closePath();
 	context.fill();
 	if (this.lineWidth > 0) {

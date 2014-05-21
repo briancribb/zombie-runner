@@ -11,7 +11,7 @@ Runner = function(settings) {
 	//this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.legProps = {};
 
-	this.head = new Head(15, 15, '#555555'),
+	this.head = new Head(15, 13, '#555555'),
 	this.torso = new Torso(55, 25, '#555555'),
 
 	this.legBack0 = new Segment(50, 20, '#333333'),
@@ -19,21 +19,23 @@ Runner = function(settings) {
 	this.legFront0 = new Segment(50, 20, '#555555'),
 	this.legFront1 = new Segment(50, 20, '#555555'),
 
-	this.armBack0 = new Segment(38, 15, '#333333'),
+	this.armBack0 = new Segment(35, 15, '#333333'),
 	this.armBack1 = new Segment(38, 15, '#333333'),
-	this.armFront0 = new Segment(38, 15, '#777777'),
+	this.armFront0 = new Segment(35, 15, '#777777'),
 	this.armFront1 = new Segment(38, 15, '#777777');
 
 
-
 	// Initialization
-	this.head.x = this.torso.getPin().x + 6;
-	this.head.y = this.torso.getPin().y - 18;
 
 	// Torso
 	this.torso.x = this.x;
 	this.torso.y = this.y;
-	this.torso.rotation = -(Math.PI/180)*70;
+	this.torso.rotation = -(Math.PI/180)*80;
+
+	// Head
+	this.head.x = this.torso.getPin().x + 6;
+	this.head.y = this.torso.getPin().y - 18;
+	this.head.rotation = this.torso.rotation + this.head.rotation;
 
 	// Back Leg
 	this.legBack0.x = this.torso.x;
@@ -67,7 +69,7 @@ Runner = function(settings) {
 	if (this.movetype === 'run') {
 		this.speed = 8;
 		this.legProps =	{
-			range0	: 60,
+			range0	: 55,
 			base	: 90,
 			range1	: 45,
 			offset	: -1.57
@@ -116,7 +118,7 @@ Runner.prototype.run = function (elapsed) {
 	// Torso
 	this.torso.x = this.x;
 	this.torso.y = this.y;
-	this.torso.rotation = -(Math.PI/180)*70;
+	this.torso.rotation = -(Math.PI/180)*80;
 
 
 	// Back Leg
@@ -139,7 +141,7 @@ Runner.prototype.run = function (elapsed) {
 
 	function moveLeg(segA, segB, cyc, set) {
 		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
-			angle1 = (Math.sin(cyc + set.offset) * set.range0 + set.range1) * Math.PI / 180,
+			angle1 = (Math.sin(cyc + set.offset) * set.range1 + set.range1) * Math.PI / 180,
 			foot = segB.getPin();
 		segA.rotation = angle0;
 		segB.rotation = segA.rotation + angle1;
