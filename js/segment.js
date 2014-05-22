@@ -1,8 +1,8 @@
-function Segment (width, height, color) {
+function Segment (lineLength, lineThickness, color) {
 	this.x = 0;
 	this.y = 0;
-	this.width = width;
-	this.height = height;
+	this.lineLength = lineLength;
+	this.lineThickness = lineThickness;
 	this.vx = 0;
 	this.vy = 0;
 	this.rotation = 0;
@@ -13,16 +13,20 @@ function Segment (width, height, color) {
 }
 
 Segment.prototype.draw = function (context) {
-	var h = this.height,
-			d = this.width + h, //top-right diagonal
-			cr = h / 2;         //corner radius
 	context.save();
 	context.translate(this.x, this.y);
 	context.rotate(this.rotation);
 	context.scale(this.scaleX, this.scaleY);
-	context.lineWidth = this.lineWidth;
-	context.fillStyle = this.color;
+	context.lineWidth = this.lineThickness;
+	context.strokeStyle = this.color;
+	context.lineJoin  = 'round';
+	context.lineCap  = 'round';
 
+	context.beginPath();
+	context.moveTo(0, 0);
+	context.lineTo(this.lineLength,0);
+	context.closePath();
+	context.stroke();
 
 	/*
 	context.beginPath();
@@ -38,7 +42,7 @@ Segment.prototype.draw = function (context) {
 	context.closePath();
 	context.fill();
 	*/
-
+	/*
 	context.beginPath();
 	context.moveTo(0, -cr);
 	context.lineTo(d-h, -cr);
@@ -61,17 +65,17 @@ Segment.prototype.draw = function (context) {
 	context.fill();
 
 	context.beginPath();
-	context.arc(this.width, 0, cr, 0, (Math.PI * 2), true);
+	context.arc(this.lineLength, 0, cr, 0, (Math.PI * 2), true);
 	context.closePath();
 	context.fill();
 
-
+	*/
 	context.restore();
 };
 
 Segment.prototype.getPin = function () {
 	return {
-		x: this.x + Math.cos(this.rotation) * this.width,
-		y: this.y + Math.sin(this.rotation) * this.width
+		x: this.x + Math.cos(this.rotation) * this.lineLength,
+		y: this.y + Math.sin(this.rotation) * this.lineLength
 	};
 };

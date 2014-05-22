@@ -2,68 +2,41 @@ var classes = classes || {}; // Giving a namespace to the class we're creating. 
 
 Runner = function(settings) {
 	console.log("I'm a runner!");
-	this.counter = 0;
+	this.appProps = settings.appProps; // There must be an app. We get the floor from the app.
+	console.log(this.appProps);
+	this.context = settings.context;
 	this.x = settings.x;
 	this.y = settings.y;
+	this.vx = 0;
+	this.vy = 0;
 	this.speed = 0;
 	this.cycle = 0;
+	this.headSize = settings.headSize || 15;
+	this.neck = settings.neck || 28;
+	this.torsoLength = settings.torsoLength || 55;
+	this.torsoWidth = settings.torsoWidth || 20;
+	this.armLength = settings.armLength || 35;
+	this.armWidth = settings.armWidth || 15;
+	this.legLength = settings.legLength || 50;
+	this.legWidth = settings.legWidth || 20;
+	this.shoulderSlide = settings.shoulderSlide || 0;
+	this.hipSlide = settings.hipSlide || 0;
 	this.movetype = settings.movetype || 'run';
 	//this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.legProps = {};
 
-	this.head = new Head(15, 13, '#555555'),
-	this.torso = new Torso(55, 25, '#555555'),
+	this.head = new Head(this.neck, this.headSize, '#999999'),
+	this.torso = new Torso(this.torsoLength, this.torsoWidth, '#999999'),
 
-	this.legBack0 = new Segment(50, 20, '#333333'),
-	this.legBack1 = new Segment(50, 20, '#333333'),
-	this.legFront0 = new Segment(50, 20, '#555555'),
-	this.legFront1 = new Segment(50, 20, '#555555'),
+	this.legBack0 = new Segment(this.legLength, this.legWidth, '#333333'),
+	this.legBack1 = new Segment(this.legLength, this.legWidth, '#333333'),
+	this.legFront0 = new Segment(this.legLength, this.legWidth, '#999999'),
+	this.legFront1 = new Segment(this.legLength, this.legWidth, '#999999'),
 
-	this.armBack0 = new Segment(35, 15, '#333333'),
-	this.armBack1 = new Segment(38, 15, '#333333'),
-	this.armFront0 = new Segment(35, 15, '#777777'),
-	this.armFront1 = new Segment(38, 15, '#777777');
-
-
-	// Initialization
-
-	// Torso
-	this.torso.x = this.x;
-	this.torso.y = this.y;
-	this.torso.rotation = -(Math.PI/180)*80;
-
-	// Head
-	this.head.x = this.torso.getPin().x + 6;
-	this.head.y = this.torso.getPin().y - 18;
-	this.head.rotation = this.torso.rotation + this.head.rotation;
-
-	// Back Leg
-	this.legBack0.x = this.torso.x;
-	this.legBack0.y = this.torso.y;
-	this.legBack1.x = this.legBack0.getPin().x;
-	this.legBack1.y = this.legBack0.getPin().y;
-
-	// Front Leg
-	this.legFront0.x = this.torso.x;
-	this.legFront0.y = this.torso.y;
-	this.legFront1.x = this.legFront0.getPin().x;
-	this.legFront1.y = this.legFront0.getPin().y;
-
-	// Back arm
-	this.armBack0.x = this.torso.getPin().x;
-	this.armBack0.y = this.torso.getPin().y;
-	this.armBack1.x = this.armBack0.getPin().x;
-	this.armBack1.y = this.armBack0.getPin().y;
-
-	// Front arm
-	this.armFront0.x = this.torso.getPin().x;
-	this.armFront0.y = this.torso.getPin().y;
-	this.armFront1.x = this.armFront0.getPin().x;
-	this.armFront1.y = this.armFront0.getPin().y;
-
-
-
-
+	this.armBack0 = new Segment(this.armLength, this.armWidth, '#333333'),
+	this.armBack1 = new Segment(this.armLength, this.armWidth, '#333333'),
+	this.armFront0 = new Segment(this.armLength, this.armWidth, '#777777'),
+	this.armFront1 = new Segment(this.armLength, this.armWidth, '#777777');
 
 
 	if (this.movetype === 'run') {
@@ -82,19 +55,18 @@ Runner = function(settings) {
 		};
 	}
 
+	// Initialization
+	this.update();
 
 
+}
+Runner.prototype.updatePositions = function () {
 
 }
 
 
-
 Runner.prototype.run = function (elapsed) {
 	//console.log('run(): cycle = ' + this.cycle);
-	this.counter ++;
-	//if (this.counter > 1000) {
-	//	return false;
-	//}
 
 
 	var self = this;
@@ -102,8 +74,8 @@ Runner.prototype.run = function (elapsed) {
 	this.cycle += this.speed * (elapsed/1000);
 
 
-	var shoulderSlide = (Math.sin(this.cycle) * 10);
-	var hipSlide = (Math.sin(this.cycle) * 5);
+	this.shoulderSlide = (Math.sin(this.cycle) * (this.speed*1.5) );
+	this.hipSlide = (Math.sin(this.cycle) * (this.speed/2) ) * 0;
 
 
 	moveLeg(self.legBack0, self.legBack1, self.cycle, this.legProps);
@@ -112,31 +84,7 @@ Runner.prototype.run = function (elapsed) {
 	moveArm(self.armBack0, self.armBack1, self.cycle + Math.PI, this.armProps);
 	moveArm(self.armFront0, self.armFront1, self.cycle, this.armProps);
 
-	this.head.x = this.torso.getPin().x + 6;
-	this.head.y = this.torso.getPin().y - 18;
-
-	// Torso
-	this.torso.x = this.x;
-	this.torso.y = this.y;
-	this.torso.rotation = -(Math.PI/180)*80;
-
-
-	// Back Leg
-	this.legBack0.x = this.torso.x - hipSlide;
-	this.legBack0.y = this.torso.y;
-
-	// Front Leg
-	this.legFront0.x = this.torso.x + hipSlide;
-	this.legFront0.y = this.torso.y;
-
-	// Back arm
-	this.armBack0.x = this.torso.getPin().x + shoulderSlide;
-	this.armBack0.y = this.torso.getPin().y;
-
-	// Front arm
-	this.armFront0.x = this.torso.getPin().x - shoulderSlide;
-	this.armFront0.y = this.torso.getPin().y;
-
+	this.update();
 
 
 	function moveLeg(segA, segB, cyc, set) {
@@ -163,25 +111,78 @@ Runner.prototype.run = function (elapsed) {
 		segB.y = segA.getPin().y;
 		//console.log('console.log(Math.sin(cyc)) = ' + Math.sin(cyc));
 	}
+	function checkFloor(seg) {
+		console.log('self.appProps = ' + self.appProps);
+		var props = self.appProps;
+		var yMax = seg.getPin().y + (seg.lineThickness / 2);
+		/*
+		if (yMax > props.bottomLimit) {
+			var dy = yMax – props.bottomLimit;
+			segment0.y -= dy;
+			segment1.y -= dy;
+			segment2.y -= dy;
+			segment3.y -= dy;
+		}
+		*/
+	}
+	checkFloor(self.legBack1);
+
+
+
+
+
+
+
+
 
 }
 
+Runner.prototype.update = function () {
+	// Torso
+	this.torso.x = this.x;
+	this.torso.y = this.y;
+	this.torso.rotation = -(Math.PI/180)*70;
 
+	// Head
+	this.head.x = this.torso.getPin().x;
+	this.head.y = this.torso.getPin().y;
+	this.head.offset = (Math.PI/180)*15;
+	this.head.rotation = this.torso.rotation + this.head.offset;
 
-Runner.prototype.draw = function (context) {
+	// Back Leg
+	this.legBack0.x = this.torso.x - this.hipSlide;
+	this.legBack0.y = this.torso.y;
+
+	// Front Leg
+	this.legFront0.x = this.torso.x + this.hipSlide;
+	this.legFront0.y = this.torso.y;
+
+	// Back arm
+	this.armBack0.x = this.torso.getPin().x + this.shoulderSlide;
+	this.armBack0.y = this.torso.getPin().y;
+
+	// Front arm
+	this.armFront0.x = this.torso.getPin().x - this.shoulderSlide;
+	this.armFront0.y = this.torso.getPin().y;
+
+	// React to gravity
+	//this.y -= this.app.props.gravity;
+}
+
+Runner.prototype.draw = function () {
 	//context.save();
 	//context.translate(this.x, this.y);
 	//context.scale(.5, .5);
-	this.legBack0.draw(context);
-	this.legBack1.draw(context);
-	this.armBack0.draw(context);
-	this.armBack1.draw(context);
-	this.torso.draw(context);
-	this.head.draw(context);
-	this.legFront0.draw(context);
-	this.legFront1.draw(context);
-	this.armFront0.draw(context);
-	this.armFront1.draw(context);
+	this.legBack0.draw(this.context);
+	this.legBack1.draw(this.context);
+	this.armBack0.draw(this.context);
+	this.armBack1.draw(this.context);
+	this.torso.draw(this.context);
+	this.head.draw(this.context);
+	this.legFront0.draw(this.context);
+	this.legFront1.draw(this.context);
+	this.armFront0.draw(this.context);
+	this.armFront1.draw(this.context);
 
 }
 

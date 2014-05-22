@@ -1,6 +1,6 @@
 var zombieRunnerApp = function(){
 	console.log('zombieRunnerApp()');
-
+	var self = this;
 	// Setting up rAF. Thank you Paul Irish.
 	window.requestAnimFrame = (function(){
 		return  window.requestAnimationFrame	|| 
@@ -18,14 +18,33 @@ var zombieRunnerApp = function(){
 
 	// Variables
 	var canvas = document.getElementById("zombieRunner");
+	self.appProps = {
+		bottomLimit : canvas.height - 30,
+		gravity : 1
+	}
 
 	var context = canvas.getContext("2d"),
+		bottomLimit = canvas.height - 30,
 		start_time = new Date().getTime(),
 		time = getTimer(),
 		elapsed = 0,
 		frame_count = 0,
 		fps = 0,
-		//runner5 = new Runner({context:context,x:100,y:200});
+		runner5 = new Runner({
+			appProps:self.appProps,
+			context:context,
+			x:100,
+			y:200,
+			headSize : 15,
+			neck : 25,
+			torsoLength : 55,
+			torsoWidth : 20,
+			armLength : 25,
+			armWidth : 15,
+			legLength : 40,
+			legWidth : 20,
+			movetype : 'run'
+		}),
 		runner6 = new Runner({context:context,x:300,y:200});
 		//runner7 = new Runner({context:context,x:500,y:200});
 		//runner8 = new Runner({context:context,x:700,y:200});
@@ -49,7 +68,7 @@ var zombieRunnerApp = function(){
 			frame_count -= 1000;
 			fps = parseInt(1000 / elapsed);
 		}
-		//runner5.run(elapsed);
+		runner5.run(elapsed);
 		//runner5.x++;
 		runner6.run(elapsed);
 		//runner7.run(elapsed);
@@ -60,7 +79,7 @@ var zombieRunnerApp = function(){
 	var render = function() {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		context.fillText( ('FPS:    ' + fps), 10,20);
-		//runner5.draw(context);
+		runner5.draw(context);
 		runner6.draw(context);
 		//runner7.draw(context);
 		//runner8.draw(context);

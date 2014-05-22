@@ -5,7 +5,7 @@ function Torso (width, height, color) {
 	this.height = height;
 	this.vx = 0;
 	this.vy = 0;
-	this.rotation = -(Math.PI/180)*70;
+	this.rotation = 0;
 	this.scaleX = 1;
 	this.scaleY = 1;
 	this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
@@ -13,43 +13,20 @@ function Torso (width, height, color) {
 }
 
 Torso.prototype.draw = function (context) {
-	var h = this.height,
-		d = this.width + h, //top-right diagonal
-		cr = h / 2;         //corner radius
 	context.save();
 	context.translate(this.x, this.y);
 	context.rotate(this.rotation);
 	context.scale(this.scaleX, this.scaleY);
-	context.lineWidth = this.lineWidth;
-	context.fillStyle = this.color;
+	context.lineWidth = this.height;
+	context.strokeStyle = this.color;
+	context.lineJoin  = 'round';
+	context.lineCap  = 'round';
+
 	context.beginPath();
-	context.moveTo(20, -cr);									// Start above zero point.
-	context.lineTo(d-2*cr, -cr);								// Straight right.
-	context.quadraticCurveTo(-cr+d, -cr, -cr+d, 0);				// Curve down on right.
-	context.lineTo(-cr+d, h-2*cr);								// Straignt down.
-	context.quadraticCurveTo(-cr+d, -cr+h, d-2*cr, -cr+h);		// Curve down and left.
-	context.lineTo(20, -cr+h);									// Straight left.
-	context.quadraticCurveTo(-cr+20, -cr+h, -cr+20, h-2*cr);	// Curve left and up.
-	context.lineTo(-cr+20, 0);									// Straight up.
-	context.quadraticCurveTo(-cr+20, -cr, 20, -cr);				// Curve up and right.
-	context.closePath();
-	context.fill();
-	if (this.lineWidth > 0) {
-		context.stroke();
-	}
-	//draw the 2 "pins"
-	context.beginPath();
-	context.arc(3, 0, this.height/2, 0, (Math.PI * 2), true);
-	context.closePath();
-	context.fill();
-	//context.stroke();
-	/*
-	context.beginPath();
-	context.arc(this.width, 0, 2, 0, (Math.PI * 2), true);
+	context.moveTo(0, 0);
+	context.lineTo(this.width,0);
 	context.closePath();
 	context.stroke();
-	*/
-
 	context.restore();
 };
 
