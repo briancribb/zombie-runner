@@ -2,14 +2,15 @@ var classes = classes || {}; // Giving a namespace to the class we're creating. 
 
 Runner = function(settings) {
 	console.log("I'm a runner!");
-	this.appProps = settings.appProps; // There must be an app. We get the floor from the app.
-	console.log(this.appProps);
+	this.counter = 0;
 	this.context = settings.context;
 	this.x = settings.x;
 	this.y = settings.y;
 	this.vx = 0;
 	this.vy = 0;
 	this.speed = 0;
+	this.gravity = settings.gravity || 1;
+	this.floor = settings.floor || 300;
 	this.cycle = 0;
 	this.headSize = settings.headSize || 15;
 	this.neck = settings.neck || 28;
@@ -60,15 +61,10 @@ Runner = function(settings) {
 
 
 }
-Runner.prototype.updatePositions = function () {
-
-}
 
 
 Runner.prototype.run = function (elapsed) {
 	//console.log('run(): cycle = ' + this.cycle);
-
-
 	var self = this;
 
 	this.cycle += this.speed * (elapsed/1000);
@@ -84,7 +80,13 @@ Runner.prototype.run = function (elapsed) {
 	moveArm(self.armBack0, self.armBack1, self.cycle + Math.PI, this.armProps);
 	moveArm(self.armFront0, self.armFront1, self.cycle, this.armProps);
 
-	this.update();
+
+
+	//if (this.counter < 10) {
+		checkFloor(self.legBack1);
+		checkFloor(self.legFront1);
+	//}
+	this.update(elapsed);
 
 
 	function moveLeg(segA, segB, cyc, set) {
@@ -95,8 +97,8 @@ Runner.prototype.run = function (elapsed) {
 		segB.rotation = segA.rotation + angle1;
 		segB.x = segA.getPin().x;
 		segB.y = segA.getPin().y;
-		segB.vx = segB.getPin().x - foot.x;
-		segB.vy = segB.getPin().y - foot.y;
+		segB.vx = (segB.getPin().x - foot.x) * (elapsed/1000);
+		segB.vy = (segB.getPin().y - foot.y) * (elapsed/1000);
 	}
 
 	function moveArm(segA, segB, cyc, set) {
@@ -112,32 +114,22 @@ Runner.prototype.run = function (elapsed) {
 		//console.log('console.log(Math.sin(cyc)) = ' + Math.sin(cyc));
 	}
 	function checkFloor(seg) {
-		console.log('self.appProps = ' + self.appProps);
-		var props = self.appProps;
+		//console.log('self.y = ' + self.y);
+		//console.log('seg.getPin().y = ' + seg.getPin().y);
+		//console.log(' ');
+		//console.log('this.gravity = ' + this.gravity);
 		var yMax = seg.getPin().y + (seg.lineThickness / 2);
-		/*
-		if (yMax > props.bottomLimit) {
-			var dy = yMax – props.bottomLimit;
-			segment0.y -= dy;
-			segment1.y -= dy;
-			segment2.y -= dy;
-			segment3.y -= dy;
+
+		if (yMax > self.floor) {
+			var dy = yMax - self.floor;
+			//self.y -= dy;
+			self.vx -= seg.vx;
+			self.vy -= seg.vy;
 		}
-		*/
 	}
-	checkFloor(self.legBack1);
-
-
-
-
-
-
-
-
-
 }
 
-Runner.prototype.update = function () {
+Runner.prototype.update = function (elapsed) {
 	// Torso
 	this.torso.x = this.x;
 	this.torso.y = this.y;
@@ -166,7 +158,14 @@ Runner.prototype.update = function () {
 	this.armFront0.y = this.torso.getPin().y;
 
 	// React to gravity
-	//this.y -= this.app.props.gravity;
+	//console.log('this.gravity = ' + ( this.gravity * (elapsed/1000) ) );
+	//this.y += ( this.gravity * (elapsed/1000) );
+	this.counter ++;
+
+	// Add velocities
+	//this.x += this.vx;
+	//this.y += 1 * (elapsed/1000);
+
 }
 
 Runner.prototype.draw = function () {
