@@ -2,16 +2,44 @@ var classes = classes || {}; // Giving a namespace to the class we're creating. 
 
 Runner = function(settings) {
 	console.log("I'm a runner!");
+
+
+
+	this.runType = {
+		run : {
+			legProps :	{
+				range0	: 55,
+				base	: 90,
+				range1	: 45,
+				offset	: -1.57,
+				jump	: 1
+			},
+			armProps :	{
+				range0	: 80,
+				base	: 90,
+				range1	: -90,
+				offset	: 1.57,
+				jump	: 1
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
 	this.counter = 0;
 	this.context = settings.context;
 	this.x = settings.x;
 	this.y = settings.y;
-	this.vx = 0;
-	this.vy = 0;
 	this.speed = 0;
 	this.gravity = settings.gravity || 1;
-	this.floor = settings.floor || 300;
-	this.cycle = 0;
+	this.floor = settings.floor;
+	this.cycle = settings.cycle || 0;
 	this.headSize = settings.headSize || 15;
 	this.neck = settings.neck || 28;
 	this.torsoLength = settings.torsoLength || 55;
@@ -24,7 +52,6 @@ Runner = function(settings) {
 	this.hipSlide = settings.hipSlide || 0;
 	this.movetype = settings.movetype || 'run';
 	//this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
-	this.legProps = {};
 
 	this.head = new Head(this.neck, this.headSize, '#999999'),
 	this.torso = new Torso(this.torsoLength, this.torsoWidth, '#999999'),
@@ -39,6 +66,8 @@ Runner = function(settings) {
 	this.armFront0 = new Segment(this.armLength, this.armWidth, '#777777'),
 	this.armFront1 = new Segment(this.armLength, this.armWidth, '#777777');
 
+	this.height =	this.torso.getPin().y - this.torso.y + (this.legLength * 2) + (this.legWidth/2) -3;
+	this.y = this.floor - this.height;
 
 	if (this.movetype === 'run') {
 		this.speed = 8;
@@ -46,90 +75,31 @@ Runner = function(settings) {
 			range0	: 55,
 			base	: 90,
 			range1	: 45,
-			offset	: -1.57
+			offset	: -1.57,
+			jump	: 1
 		},
 		this.armProps =	{
 			range0	: 80,
 			base	: 90,
 			range1	: -90,
-			offset	: 1.57
+			offset	: 1.57,
+			jump	: 1
 		};
 	}
-
-	// Initialization
-	this.update();
 
 
 }
 
 
 Runner.prototype.run = function (elapsed) {
-	//console.log('run(): cycle = ' + this.cycle);
 	var self = this;
-
 	this.cycle += this.speed * (elapsed/1000);
-
-
 	this.shoulderSlide = (Math.sin(this.cycle) * (this.speed*1.5) );
 	this.hipSlide = (Math.sin(this.cycle) * (this.speed/2) ) * 0;
 
-
-	moveLeg(self.legBack0, self.legBack1, self.cycle, this.legProps);
-	moveLeg(self.legFront0, self.legFront1, self.cycle + Math.PI, this.legProps);
-
-	moveArm(self.armBack0, self.armBack1, self.cycle + Math.PI, this.armProps);
-	moveArm(self.armFront0, self.armFront1, self.cycle, this.armProps);
+	this.y = this.floor - this.height - (Math.sin(this.cycle*2) * this.speed * this.legProps.jump);
 
 
-
-	//if (this.counter < 10) {
-		checkFloor(self.legBack1);
-		checkFloor(self.legFront1);
-	//}
-	this.update(elapsed);
-
-
-	function moveLeg(segA, segB, cyc, set) {
-		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
-			angle1 = (Math.sin(cyc + set.offset) * set.range1 + set.range1) * Math.PI / 180,
-			foot = segB.getPin();
-		segA.rotation = angle0;
-		segB.rotation = segA.rotation + angle1;
-		segB.x = segA.getPin().x;
-		segB.y = segA.getPin().y;
-		segB.vx = (segB.getPin().x - foot.x) * (elapsed/1000);
-		segB.vy = (segB.getPin().y - foot.y) * (elapsed/1000);
-	}
-
-	function moveArm(segA, segB, cyc, set) {
-		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
-			//angle1 = (Math.sin(cyc) * set.range0 - set.base) * Math.PI / 180;
-			angle1 = (Math.sin(cyc) * 45 - 60) * Math.PI / 180;
-			//angle1 = 0;
-
-		segA.rotation = angle0;
-		segB.rotation = segA.rotation + angle1;
-		segB.x = segA.getPin().x;
-		segB.y = segA.getPin().y;
-		//console.log('console.log(Math.sin(cyc)) = ' + Math.sin(cyc));
-	}
-	function checkFloor(seg) {
-		//console.log('self.y = ' + self.y);
-		//console.log('seg.getPin().y = ' + seg.getPin().y);
-		//console.log(' ');
-		//console.log('this.gravity = ' + this.gravity);
-		var yMax = seg.getPin().y + (seg.lineThickness / 2);
-
-		if (yMax > self.floor) {
-			var dy = yMax - self.floor;
-			//self.y -= dy;
-			self.vx -= seg.vx;
-			self.vy -= seg.vy;
-		}
-	}
-}
-
-Runner.prototype.update = function (elapsed) {
 	// Torso
 	this.torso.x = this.x;
 	this.torso.y = this.y;
@@ -144,28 +114,53 @@ Runner.prototype.update = function (elapsed) {
 	// Back Leg
 	this.legBack0.x = this.torso.x - this.hipSlide;
 	this.legBack0.y = this.torso.y;
+	moveLeg(self.legBack0, self.legBack1, self.cycle, this.legProps);
 
 	// Front Leg
 	this.legFront0.x = this.torso.x + this.hipSlide;
 	this.legFront0.y = this.torso.y;
+	moveLeg(self.legFront0, self.legFront1, self.cycle + Math.PI, this.legProps);
 
 	// Back arm
 	this.armBack0.x = this.torso.getPin().x + this.shoulderSlide;
 	this.armBack0.y = this.torso.getPin().y;
+	moveArm(self.armBack0, self.armBack1, self.cycle + Math.PI, this.armProps);
 
 	// Front arm
 	this.armFront0.x = this.torso.getPin().x - this.shoulderSlide;
 	this.armFront0.y = this.torso.getPin().y;
+	moveArm(self.armFront0, self.armFront1, self.cycle, this.armProps);
 
 	// React to gravity
 	//console.log('this.gravity = ' + ( this.gravity * (elapsed/1000) ) );
 	//this.y += ( this.gravity * (elapsed/1000) );
 	this.counter ++;
 
-	// Add velocities
-	//this.x += this.vx;
-	//this.y += 1 * (elapsed/1000);
 
+
+
+	function moveLeg(segA, segB, cyc, set) {
+		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
+			angle1 = (Math.sin(cyc + set.offset) * set.range1 + set.range1) * Math.PI / 180,
+			foot = segB.getPin();
+		segA.rotation = angle0;
+		segB.rotation = segA.rotation + angle1;
+		segB.x = segA.getPin().x;
+		segB.y = segA.getPin().y;
+	}
+
+	function moveArm(segA, segB, cyc, set) {
+		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
+			//angle1 = (Math.sin(cyc) * set.range0 - set.base) * Math.PI / 180;
+			angle1 = (Math.sin(cyc) * 45 - 60) * Math.PI / 180;
+			//angle1 = 0;
+
+		segA.rotation = angle0;
+		segB.rotation = segA.rotation + angle1;
+		segB.x = segA.getPin().x;
+		segB.y = segA.getPin().y;
+		//console.log('console.log(Math.sin(cyc)) = ' + Math.sin(cyc));
+	}
 }
 
 Runner.prototype.draw = function () {

@@ -20,7 +20,7 @@ var zombieRunnerApp = function(){
 	var canvas = document.getElementById("zombieRunner");
 	self.props = {
 		floor : canvas.height,
-		gravity :100
+		gravity :5
 	};
 
 	var context = canvas.getContext("2d"),
@@ -31,7 +31,6 @@ var zombieRunnerApp = function(){
 		frame_count = 0,
 		fps = 0,
 		runner5 = new Runner({
-			appProps:self.appProps,
 			context:context,
 			x:100,
 			y:200,
@@ -45,13 +44,13 @@ var zombieRunnerApp = function(){
 			legWidth : 20,
 			floor : self.props.floor,
 			gravity : self.props.gravity,
+			cycle : 2,
 			movetype : 'run'
 		});
-		//runner6 = new Runner({context:context,x:300,y:200});
+		runner6 = new Runner({context:context,x:300,y:200, floor : self.props.floor, gravity : self.props.gravity});
 		//runner7 = new Runner({context:context,x:500,y:200});
 		//runner8 = new Runner({context:context,x:700,y:200});
 		//runner10 = new Runner({context:context,x:900,y:200});
-
 
 
 	function animloop(){
@@ -71,7 +70,7 @@ var zombieRunnerApp = function(){
 		}
 		runner5.run(elapsed);
 		//runner5.x++;
-		//runner6.run(elapsed);
+		runner6.run(elapsed);
 		//runner7.run(elapsed);
 		//runner8.run(elapsed);
 		//runner10.run(elapsed);
@@ -81,7 +80,7 @@ var zombieRunnerApp = function(){
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		context.fillText( ('FPS:    ' + fps), 10,20);
 		runner5.draw(context);
-		//runner6.draw(context);
+		runner6.draw(context);
 		//runner7.draw(context);
 		//runner8.draw(context);
 		//runner10.draw(context);
