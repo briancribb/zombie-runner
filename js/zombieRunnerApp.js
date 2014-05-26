@@ -33,7 +33,7 @@ var zombieRunnerApp = function(){
 		runner5 = new Runner({
 			context:context,
 			x:100,
-			y:200,
+			y:self.props.floor,
 			headSize : 15,
 			neck : 25,
 			torsoLength : 55,
@@ -42,15 +42,19 @@ var zombieRunnerApp = function(){
 			armWidth : 15,
 			legLength : 40,
 			legWidth : 20,
-			floor : self.props.floor,
 			gravity : self.props.gravity,
 			cycle : 2,
-			movetype : 'run'
+			speed : 4,
+			moveType : 'zombie'
 		});
-		runner6 = new Runner({context:context,x:300,y:200, floor : self.props.floor, gravity : self.props.gravity});
-		//runner7 = new Runner({context:context,x:500,y:200});
-		//runner8 = new Runner({context:context,x:700,y:200});
-		//runner10 = new Runner({context:context,x:900,y:200});
+		runner6 = new Runner({
+			x:300,
+			y: self.props.floor,
+			gravity : self.props.gravity,
+			moveType : 'run',
+			speed:8
+		});
+		runner7 = new Runner({x:500,y:self.props.floor, moveType : 'run2', speed:6});
 
 
 	function animloop(){
@@ -71,9 +75,7 @@ var zombieRunnerApp = function(){
 		runner5.run(elapsed);
 		//runner5.x++;
 		runner6.run(elapsed);
-		//runner7.run(elapsed);
-		//runner8.run(elapsed);
-		//runner10.run(elapsed);
+		runner7.run(elapsed);
 	}
 
 	var render = function() {
@@ -81,14 +83,15 @@ var zombieRunnerApp = function(){
 		context.fillText( ('FPS:    ' + fps), 10,20);
 		runner5.draw(context);
 		runner6.draw(context);
-		//runner7.draw(context);
-		//runner8.draw(context);
-		//runner10.draw(context);
+		runner7.draw(context);
+
 	}
 	render(); // initial display call.
 
 	// Let's kick off the animation.
 	animloop();
+
+
 
 
 }; zombieRunnerApp();
