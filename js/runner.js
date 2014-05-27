@@ -1,8 +1,6 @@
 var classes = classes || {}; // Giving a namespace to the class we're creating. It keeps things out of global.
 
 Runner = function(settings) {
-	console.log("I'm a runner!");
-
 
 	this.moveProps = {
 		run : {
@@ -77,19 +75,26 @@ Runner = function(settings) {
 	this.legWidth = settings.legWidth || 20;
 	this.shoulderSlide = settings.shoulderSlide || 0;
 	this.hipSlide = settings.hipSlide || 0;
+	this.color = settings.color || "rgb(119,119,119)";
 
-	this.head = new Head(this.neck, this.headSize, '#999999'),
-	this.torso = new Torso(this.torsoLength, this.torsoWidth, '#999999'),
+	// Only works with rgb. Needs adjustment for rgba.
+	var colorComponents = this.color.substring(4, this.color.length-1).replace(/ /g, '').split(',');
 
-	this.legBack0 = new Segment(this.legLength, this.legWidth, '#333333'),
-	this.legBack1 = new Segment(this.legLength, this.legWidth, '#333333'),
-	this.legFront0 = new Segment(this.legLength, this.legWidth, '#999999'),
-	this.legFront1 = new Segment(this.legLength, this.legWidth, '#999999'),
+	this.colorLight = 'rgb(' + (parseInt(colorComponents[0])+30) + ', ' + (parseInt(colorComponents[1])+30) + ', ' + (parseInt(colorComponents[2])+30) + ')' || "rgb(149,149,149)";
+	this.colorDark = 'rgb(' + (parseInt(colorComponents[0])-30) + ', ' + (parseInt(colorComponents[1])-30) + ', ' + (parseInt(colorComponents[2])-30) + ')' || "rgb(89,89,89)";
 
-	this.armBack0 = new Segment(this.armLength, this.armWidth, '#333333'),
-	this.armBack1 = new Segment(this.armLength, this.armWidth, '#333333'),
-	this.armFront0 = new Segment(this.armLength, this.armWidth, '#777777'),
-	this.armFront1 = new Segment(this.armLength, this.armWidth, '#777777');
+	this.head = new Head(this.neck, this.headSize, this.color),
+	this.torso = new Torso(this.torsoLength, this.torsoWidth, this.color),
+
+	this.legBack0 = new Segment(this.legLength, this.legWidth, this.colorDark),
+	this.legBack1 = new Segment(this.legLength, this.legWidth, this.colorDark),
+	this.legFront0 = new Segment(this.legLength, this.legWidth, this.color),
+	this.legFront1 = new Segment(this.legLength, this.legWidth, this.color),
+
+	this.armBack0 = new Segment(this.armLength, this.armWidth, this.colorDark),
+	this.armBack1 = new Segment(this.armLength, this.armWidth, this.colorDark),
+	this.armFront0 = new Segment(this.armLength, this.armWidth, this.colorLight),
+	this.armFront1 = new Segment(this.armLength, this.armWidth, this.colorLight);
 
 	this.moveType = this.moveProps[ settings.moveType ] || this.moveProps['run'];
 	this.x = settings.x;
@@ -101,9 +106,6 @@ Runner.prototype.run = function (elapsed) {
 	var self = this;
 	this.cycle += this.speed * (elapsed/1000);
 	this.shoulderSlide = (Math.sin(this.cycle) * (this.moveType.shoulderSlide) );
-
-	//this.y -= (Math.sin(this.cycle*2) * this.speed * this.moveType.legProps.jump);
-	//this.y = settings.y - this.height;
 
 	// Torso
 	this.torso.x = this.x;
@@ -136,12 +138,6 @@ Runner.prototype.run = function (elapsed) {
 	this.armFront0.y = this.torso.getPin().y;
 	moveArm(self.armFront0, self.armFront1, self.cycle, this.moveType.armProps);
 
-	// React to gravity
-	//console.log('this.gravity = ' + ( this.gravity * (elapsed/1000) ) );
-	//this.y += ( this.gravity * (elapsed/1000) );
-	this.counter ++;
-
-
 
 
 	function moveLeg(segA, segB, cyc, set) {
@@ -167,9 +163,6 @@ Runner.prototype.run = function (elapsed) {
 }
  
 Runner.prototype.draw = function (context) {
-	//context.save();
-	//context.translate(this.x, this.y);
-	//context.scale(.5, .5);
 	this.legBack0.draw(context);
 	this.legBack1.draw(context);
 	this.armBack0.draw(context);

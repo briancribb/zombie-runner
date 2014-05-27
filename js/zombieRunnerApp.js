@@ -31,7 +31,7 @@ var zombieRunnerApp = function(){
 		frame_count = 0,
 		fps = 0,
 		runner5 = new Runner({
-			context:context,
+			color: 'rgb(180,180,180)',
 			x:100,
 			y:self.props.floor,
 			headSize : 15,
@@ -44,17 +44,24 @@ var zombieRunnerApp = function(){
 			legWidth : 20,
 			gravity : self.props.gravity,
 			cycle : 2,
-			speed : 4,
+			speed : 6,
 			moveType : 'zombie'
 		});
 		runner6 = new Runner({
+			color: 'rgb(209,90,90)',
 			x:300,
 			y: self.props.floor,
 			gravity : self.props.gravity,
 			moveType : 'run',
 			speed:8
 		});
-		runner7 = new Runner({x:500,y:self.props.floor, moveType : 'run2', speed:6});
+		runner7 = new Runner({
+			color: 'rgb(100,173,245)',
+			x:500,
+			y:self.props.floor,
+			moveType : 'run2',
+			speed: 7
+		});
 
 
 	function animloop(){
