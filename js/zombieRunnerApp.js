@@ -34,7 +34,7 @@ var zombieRunnerApp = function(){
 			color: 'rgb(180,180,180)',
 			x:100,
 			y:self.props.floor,
-			headSize : 15,
+			headSize : 30,
 			neck : 25,
 			torsoLength : 55,
 			torsoWidth : 20,
@@ -51,8 +51,16 @@ var zombieRunnerApp = function(){
 			color: 'rgb(209,90,90)',
 			x:300,
 			y: self.props.floor,
+			headSize : 26,
+			neck : 24,
 			gravity : self.props.gravity,
 			moveType : 'run',
+			armWidth : 13,
+			armLength : 28,
+			legWidth : 15,
+			legLength : 45,
+			torsoLength : 45,
+			torsoWidth : 15,
 			art:'female',
 			speed:8
 		});
@@ -94,6 +102,7 @@ var zombieRunnerApp = function(){
 		runner7.draw(context);
 
 	}
+	update();
 	render(); // initial display call.
 
 	// Let's kick off the animation.

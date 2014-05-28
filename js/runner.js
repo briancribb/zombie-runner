@@ -9,7 +9,7 @@ Runner = function(settings) {
 	this.gravity = settings.gravity || 1;
 	this.floor = settings.y; // the y value is where you want the feet to end up.
 	this.cycle = settings.cycle || 0;
-	this.headSize = settings.headSize || 15;
+	this.headSize = settings.headSize || 30;
 	this.neck = settings.neck || 28;
 	this.torsoLength = settings.torsoLength || 55;
 	this.torsoWidth = settings.torsoWidth || 20;
@@ -112,8 +112,8 @@ Runner.prototype.draw = function (context) {
 	this.legBack1.draw(context);
 	this.armBack0.draw(context);
 	this.armBack1.draw(context);
-	this.torso.draw(context);
 	this.head.draw(context);
+	this.torso.draw(context);
 	this.legFront0.draw(context);
 	this.legFront1.draw(context);
 	this.armFront0.draw(context);
