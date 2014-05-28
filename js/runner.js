@@ -2,62 +2,6 @@ var classes = classes || {}; // Giving a namespace to the class we're creating. 
 
 Runner = function(settings) {
 
-	this.moveProps = {
-		run : {
-			torsoAngle		: -(Math.PI/180)*70,
-			headOffset		: (Math.PI/180)*15,
-			shoulderSlide	: 8,
-			legProps		: {
-				range0		: 55,
-				base		: 90,
-				range1		: 45,
-				offset		: -1.57,
-				jump		: 15
-			},
-			armProps		: {
-				range0		: 80,
-				base		: 90,
-				range1		: 35,
-				offset		: 60
-			}
-		},
-		run2 : {
-			torsoAngle		: -(Math.PI/180)*85,
-			headOffset		: (Math.PI/180)*8,
-			shoulderSlide	: 4,
-			legProps		: {
-				range0		: 40,
-				base		: 90,
-				range1		: 40,
-				offset		: -1.57,
-				jump		: 10
-			},
-			armProps		: {
-				range0		: 50,
-				base		: 90,
-				range1		: 35,
-				offset		: 70
-			}
-		},
-		zombie : {
-			torsoAngle		: -(Math.PI/180)*80,
-			headOffset		: (Math.PI/180)*15,
-			shoulderSlide	: 1,
-			legProps		: {
-				range0		: 15,
-				base		: 90,
-				range1		: 15,
-				offset		: -1.57,
-				jump		: 0
-			},
-			armProps		: {
-				range0		: 5,
-				base		: 0,
-				range1		: 10,
-				offset		: 15
-			}
-		}
-	}
 
 
 	this.counter = 0;
@@ -76,6 +20,7 @@ Runner = function(settings) {
 	this.shoulderSlide = settings.shoulderSlide || 0;
 	this.hipSlide = settings.hipSlide || 0;
 	this.color = settings.color || "rgb(119,119,119)";
+	this.art = settings.art || 'male';
 
 	// Only works with rgb. Needs adjustment for rgba.
 	var colorComponents = this.color.substring(4, this.color.length-1).replace(/ /g, '').split(',');
@@ -84,7 +29,7 @@ Runner = function(settings) {
 	this.colorDark = 'rgb(' + (parseInt(colorComponents[0])-30) + ', ' + (parseInt(colorComponents[1])-30) + ', ' + (parseInt(colorComponents[2])-30) + ')' || "rgb(89,89,89)";
 
 	this.head = new Head(this.neck, this.headSize, this.color),
-	this.torso = new Torso(this.torsoLength, this.torsoWidth, this.color),
+	this.torso = new Torso(this.torsoLength, this.torsoWidth, this.color, this.art),
 
 	this.legBack0 = new Segment(this.legLength, this.legWidth, this.colorDark),
 	this.legBack1 = new Segment(this.legLength, this.legWidth, this.colorDark),
@@ -173,5 +118,62 @@ Runner.prototype.draw = function (context) {
 	this.legFront1.draw(context);
 	this.armFront0.draw(context);
 	this.armFront1.draw(context);
+}
+
+Runner.prototype.moveProps = {
+	run : {
+		torsoAngle		: -(Math.PI/180)*70,
+		headOffset		: (Math.PI/180)*15,
+		shoulderSlide	: 8,
+		legProps		: {
+			range0		: 55,
+			base		: 90,
+			range1		: 45,
+			offset		: -1.57,
+			jump		: 15
+		},
+		armProps		: {
+			range0		: 80,
+			base		: 90,
+			range1		: 35,
+			offset		: 60
+		}
+	},
+	run2 : {
+		torsoAngle		: -(Math.PI/180)*85,
+		headOffset		: (Math.PI/180)*8,
+		shoulderSlide	: 4,
+		legProps		: {
+			range0		: 40,
+			base		: 90,
+			range1		: 40,
+			offset		: -1.57,
+			jump		: 10
+		},
+		armProps		: {
+			range0		: 50,
+			base		: 90,
+			range1		: 35,
+			offset		: 70
+		}
+	},
+	zombie : {
+		torsoAngle		: -(Math.PI/180)*80,
+		headOffset		: (Math.PI/180)*15,
+		shoulderSlide	: 1,
+		legProps		: {
+			range0		: 15,
+			base		: 90,
+			range1		: 15,
+			offset		: -1.57,
+			jump		: 0
+		},
+		armProps		: {
+			range0		: 5,
+			base		: 0,
+			range1		: 10,
+			offset		: 15
+		}
+	}
 }
 

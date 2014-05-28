@@ -53,6 +53,7 @@ var zombieRunnerApp = function(){
 			y: self.props.floor,
 			gravity : self.props.gravity,
 			moveType : 'run',
+			art:'female',
 			speed:8
 		});
 		runner7 = new Runner({
