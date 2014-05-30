@@ -1,6 +1,4 @@
-function Head (neck, headSize, color) {
-	var self = this;
-
+function Head (neck, headSize, color, headType) {
 	this.x = 0;
 	this.y = 0;
 	this.radius = headSize/2;
@@ -13,6 +11,7 @@ function Head (neck, headSize, color) {
 	this.scaleY = headSize.toFixed(2)/15;
 	this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.lineradius = 1;
+	this.headType = headType || 'operator';
 }
 
 Head.prototype.draw = function (context) {
@@ -39,19 +38,11 @@ Head.prototype.draw = function (context) {
 		context.save();
 			context.translate(self.neck, 0);
 			context.rotate(-self.rotation);
-			this.graphics.headPlain(self, context);
-			this.graphics.headset(self, context);
+
+			this.headTypes[this.headType](self, context);
+
 		context.restore();
 	context.restore();
-
-
-
-
-
-
-
-
-
 
 };
 
@@ -128,5 +119,18 @@ Head.prototype.graphics = {
 
 
 		context.restore();
+	}
+}
+
+Head.prototype.headTypes = {
+	plain : function(self, context) {
+		self.graphics.headPlain(self, context);
+	},
+	operator : function(self, context) {
+		self.graphics.headPlain(self, context);
+		self.graphics.headset(self, context);
+	},
+	zombie : function(self, context) {
+		self.graphics.headZom(self, context);
 	}
 }

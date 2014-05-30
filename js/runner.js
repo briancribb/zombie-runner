@@ -10,9 +10,11 @@ Runner = function(settings) {
 	this.floor = settings.y; // the y value is where you want the feet to end up.
 	this.cycle = settings.cycle || 0;
 	this.headSize = settings.headSize || 30;
+	this.headType = settings.headType || 'plain';
 	this.neck = settings.neck || 28;
 	this.torsoLength = settings.torsoLength || 55;
 	this.torsoWidth = settings.torsoWidth || 20;
+	this.torsoType = settings.torsoType || 'male';
 	this.armLength = settings.armLength || 35;
 	this.armWidth = settings.armWidth || 15;
 	this.legLength = settings.legLength || 50;
@@ -20,7 +22,6 @@ Runner = function(settings) {
 	this.shoulderSlide = settings.shoulderSlide || 0;
 	this.hipSlide = settings.hipSlide || 0;
 	this.color = settings.color || "rgb(119,119,119)";
-	this.art = settings.art || 'male';
 
 	// Only works with rgb. Needs adjustment for rgba.
 	var colorComponents = this.color.substring(4, this.color.length-1).replace(/ /g, '').split(',');
@@ -28,8 +29,8 @@ Runner = function(settings) {
 	this.colorLight = 'rgb(' + (parseInt(colorComponents[0])+30) + ', ' + (parseInt(colorComponents[1])+30) + ', ' + (parseInt(colorComponents[2])+30) + ')' || "rgb(149,149,149)";
 	this.colorDark = 'rgb(' + (parseInt(colorComponents[0])-30) + ', ' + (parseInt(colorComponents[1])-30) + ', ' + (parseInt(colorComponents[2])-30) + ')' || "rgb(89,89,89)";
 
-	this.head = new Head(this.neck, this.headSize, this.color),
-	this.torso = new Torso(this.torsoLength, this.torsoWidth, this.color, this.art),
+	this.head = new Head(this.neck, this.headSize, this.color, this.headType),
+	this.torso = new Torso(this.torsoLength, this.torsoWidth, this.color, this.torsoType),
 
 	this.legBack0 = new Segment(this.legLength, this.legWidth, this.colorDark),
 	this.legBack1 = new Segment(this.legLength, this.legWidth, this.colorDark),

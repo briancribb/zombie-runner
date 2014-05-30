@@ -35,6 +35,7 @@ var zombieRunnerApp = function(){
 			x:100,
 			y:self.props.floor,
 			headSize : 30,
+			headType : 'zombie',
 			neck : 25,
 			torsoLength : 55,
 			torsoWidth : 20,
@@ -52,6 +53,7 @@ var zombieRunnerApp = function(){
 			x:300,
 			y: self.props.floor,
 			headSize : 26,
+			headType : 'operator',
 			neck : 24,
 			gravity : self.props.gravity,
 			moveType : 'run',
@@ -61,7 +63,7 @@ var zombieRunnerApp = function(){
 			legLength : 45,
 			torsoLength : 45,
 			torsoWidth : 15,
-			art:'female',
+			torsoType:'female',
 			speed:8
 		});
 		runner7 = new Runner({

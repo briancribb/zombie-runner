@@ -1,4 +1,4 @@
-function Torso (tallness, waist, color, art) {
+function Torso (tallness, waist, color, torsoType) {
 	this.x = 0;
 	this.y = 0;
 	this.tallness = tallness;
@@ -10,7 +10,7 @@ function Torso (tallness, waist, color, art) {
 	this.scaleY = 1;
 	this.color = (color === undefined) ? "#ffffff" : utils.parseColor(color);
 	this.lineWidth = 0;
-	this.art = art || 'male';
+	this.torsoType = torsoType || 'male';
 }
 
 Torso.prototype.draw = function (context) {
@@ -18,8 +18,9 @@ Torso.prototype.draw = function (context) {
 	context.translate(this.x, this.y);
 	context.rotate(this.rotation);
 	context.scale(this.scaleX, this.scaleY);
-	this.graphics[this.art](this, context);
-	//this.apply( this.art, [this, context] );
+	//this.graphics[this.torsoType](this, context);
+	this.torsoTypes[this.torsoType](self, context);
+
 	context.restore();
 };
 
@@ -57,4 +58,21 @@ Torso.prototype.graphics = {
 		context.stroke();
 	}
 	// Stuff.
+}
+Torso.prototype.torsoTypes = {
+	male : function(self, context) {
+		self.graphics.male(self, context);
+	},
+	female : function(self, context) {
+		self.graphics.female(self, context);
+	},
+	operatorMale : function(self, context) {
+		self.graphics.male(self, context);
+	},
+	operatorFemale : function(self, context) {
+		self.graphics.female(self, context);
+	},
+	zombie : function(self, context) {
+		self.graphics.male(self, context);
+	}
 }
