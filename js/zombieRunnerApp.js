@@ -63,7 +63,7 @@ var zombieRunnerApp = function(){
 			legLength : 45,
 			torsoLength : 45,
 			torsoWidth : 15,
-			torsoType:'female',
+			torsoType:'operatorFemale',
 			speed:8
 		});
 		runner7 = new Runner({
@@ -92,16 +92,16 @@ var zombieRunnerApp = function(){
 		}
 		runner5.run(elapsed);
 		//runner5.x++;
-		runner6.run(elapsed);
-		runner7.run(elapsed);
+		//runner6.run(elapsed);
+		//runner7.run(elapsed);
 	}
 
 	var render = function() {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		context.fillText( ('FPS:    ' + fps), 10,20);
 		runner5.draw(context);
-		runner6.draw(context);
-		runner7.draw(context);
+		//runner6.draw(context);
+		//runner7.draw(context);
 
 	}
 	update();

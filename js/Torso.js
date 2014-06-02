@@ -18,8 +18,11 @@ Torso.prototype.draw = function (context) {
 	context.translate(this.x, this.y);
 	context.rotate(this.rotation);
 	context.scale(this.scaleX, this.scaleY);
-	//this.graphics[this.torsoType](this, context);
-	this.torsoTypes[this.torsoType](self, context);
+	context.lineWidth = self.waist;
+	context.strokeStyle = self.color;
+	context.lineJoin  = 'round';
+	context.lineCap  = 'round';
+	this.torsoTypes[this.torsoType](this, context);
 
 	context.restore();
 };
@@ -33,31 +36,41 @@ Torso.prototype.getPin = function () {
 
 Torso.prototype.graphics = {
 	male : function(self, context) {
-		//console.log('male. scaleX = ' + self.scaleX);
 		context.lineWidth = self.waist;
 		context.strokeStyle = self.color;
-		context.lineJoin  = 'round';
-		context.lineCap  = 'round';
-		context.beginPath();
+		context.beginPath(); 
 		context.moveTo(0, 0);
 		context.lineTo(self.tallness,0);
 		context.closePath();
 		context.stroke();
 	},
 	female : function(self, context) {
-		context.lineWidth = self.waist;
-		context.strokeStyle = self.color;
-		context.lineJoin  = 'round';
-		context.lineCap  = 'round';
-		context.beginPath();
-		context.moveTo(0, 0);
-		context.lineTo(self.tallness,0);
-		context.lineTo(self.tallness*.8, self.waist/2 );
-		context.lineTo(self.tallness*.6,0);
-		context.closePath();
-		context.stroke();
+		context.save();
+			context.lineWidth = self.waist;
+			context.strokeStyle = self.color;
+			context.beginPath();
+			context.moveTo(0, 0);
+			context.lineTo(self.tallness,0);
+			context.lineTo(self.tallness*.8, self.waist/2 );
+			context.lineTo(self.tallness*.6,0);
+			context.closePath();
+			context.stroke();
+		context.restore();
+	},
+	backpack : function(self, context) {
+		context.save();
+			context.lineWidth = self.waist;
+			context.strokeStyle = context.fillStyle = '#000000';
+			context.beginPath();
+			context.moveTo(self.tallness*.4, 0);
+			context.lineTo(self.tallness*.4,-self.waist*1.5);
+			context.lineTo(self.tallness*.8,-self.waist*1.5);
+			context.lineTo(self.tallness,-self.waist);
+			context.closePath();
+			context.fill();
+			context.stroke();
+		context.restore();
 	}
-	// Stuff.
 }
 Torso.prototype.torsoTypes = {
 	male : function(self, context) {
@@ -70,6 +83,7 @@ Torso.prototype.torsoTypes = {
 		self.graphics.male(self, context);
 	},
 	operatorFemale : function(self, context) {
+		self.graphics.backpack(self, context);
 		self.graphics.female(self, context);
 	},
 	zombie : function(self, context) {

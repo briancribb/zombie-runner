@@ -9,6 +9,8 @@ Runner = function(settings) {
 	this.gravity = settings.gravity || 1;
 	this.floor = settings.y; // the y value is where you want the feet to end up.
 	this.cycle = settings.cycle || 0;
+	this.lastCycle = 0;
+	this.sinDirection = true; // True means adding, false means subtracting.
 	this.headSize = settings.headSize || 30;
 	this.headType = settings.headType || 'plain';
 	this.neck = settings.neck || 28;
@@ -49,9 +51,36 @@ Runner = function(settings) {
 
 
 Runner.prototype.run = function (elapsed) {
-	var self = this;
+	this.lastCycle = this.cycle;
 	this.cycle += this.speed * (elapsed/1000);
 	this.shoulderSlide = (Math.sin(this.cycle) * (this.moveType.shoulderSlide) );
+
+	this.counter ++;
+	if (this.counter < 300) {
+		var cycleWave = Math.sin(this.cycle);
+		var lastCycleWave = Math.sin(this.lastCycle);
+
+		if (cycleWave > lastCycleWave && this.sinDirection === false) {
+			console.log('Going UP: lastCycleWave: ' + lastCycleWave + ', cycleWave: ' + cycleWave + ', this.counter: ' + this.counter);
+			this.sinDirection = true;
+			checkNewRotation(this.counter);
+			this.counter ++;
+		} else if (cycleWave < lastCycleWave && this.sinDirection === true) {
+			console.log('Going DOWN: lastCycleWave: ' + lastCycleWave + ', cycleWave: ' + cycleWave + ', this.counter: ' + this.counter);
+			this.sinDirection = false;
+			//checkNewRotation(this.counter);
+			//this.counter ++;
+		}
+
+	}
+
+	function checkNewRotation(counter) {
+		if ( counter % 2 === 0) {
+			console.log("-- Multiple of two. We're in a new rotational cycle.");
+		} else {
+			console.log("-- Same rotational cycle");
+		}
+	}
 
 	// Torso
 	this.torso.x = this.x;
@@ -67,23 +96,22 @@ Runner.prototype.run = function (elapsed) {
 	// Back Leg
 	this.legBack0.x = this.torso.x - this.hipSlide;
 	this.legBack0.y = this.torso.y;
-	moveLeg(self.legBack0, self.legBack1, self.cycle, this.moveType.legProps);
+	moveLeg(this.legBack0, this.legBack1, this.cycle, this.moveType.legProps);
 
 	// Front Leg
 	this.legFront0.x = this.torso.x + this.hipSlide;
 	this.legFront0.y = this.torso.y;
-	moveLeg(self.legFront0, self.legFront1, self.cycle + Math.PI, this.moveType.legProps);
+	moveLeg(this.legFront0, this.legFront1, this.cycle + Math.PI, this.moveType.legProps);
 
 	// Back arm
 	this.armBack0.x = this.torso.getPin().x + this.shoulderSlide;
 	this.armBack0.y = this.torso.getPin().y;
-	moveArm(self.armBack0, self.armBack1, self.cycle + Math.PI, this.moveType.armProps);
+	moveArm(this.armBack0, this.armBack1, this.cycle + Math.PI, this.moveType.armProps);
 
 	// Front arm
 	this.armFront0.x = this.torso.getPin().x - this.shoulderSlide;
 	this.armFront0.y = this.torso.getPin().y;
-	moveArm(self.armFront0, self.armFront1, self.cycle, this.moveType.armProps);
-
+	moveArm(this.armFront0, this.armFront1, this.cycle, this.moveType.armProps);
 
 
 	function moveLeg(segA, segB, cyc, set) {
