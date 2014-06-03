@@ -110,7 +110,13 @@ var zombieRunnerApp = function(){
 	// Let's kick off the animation.
 	animloop();
 
-
+	zombieRunnerApp.changeArm = function() {
+		if (runner5.reachBack === true) {
+			runner5.reachBack = false;
+		} else {
+			runner5.reachBack = true;
+		}
+	}
 
 
 }; zombieRunnerApp();

@@ -24,6 +24,7 @@ Runner = function(settings) {
 	this.shoulderSlide = settings.shoulderSlide || 0;
 	this.hipSlide = settings.hipSlide || 0;
 	this.color = settings.color || "rgb(119,119,119)";
+	this.reachBack = this.reaching = false;
 
 	// Only works with rgb. Needs adjustment for rgba.
 	var colorComponents = this.color.substring(4, this.color.length-1).replace(/ /g, '').split(',');
@@ -111,7 +112,11 @@ Runner.prototype.run = function (elapsed) {
 	// Front arm
 	this.armFront0.x = this.torso.getPin().x - this.shoulderSlide;
 	this.armFront0.y = this.torso.getPin().y;
-	moveArm(this.armFront0, this.armFront1, this.cycle, this.moveType.armProps);
+
+	//var armSet =  this.moveType.armProps;
+	var armSet = (this.reachBack === true ? this.moveProps.reachBack.armProps : this.moveType.armProps);
+	//moveArm(this.armFront0, this.armFront1, this.cycle, this.moveProps.reachBack.armProps);
+	moveArm(this.armFront0, this.armFront1, this.cycle, armSet);
 
 
 	function moveLeg(segA, segB, cyc, set) {
@@ -202,6 +207,14 @@ Runner.prototype.moveProps = {
 			base		: 0,
 			range1		: 10,
 			offset		: 15
+		}
+	},
+	reachBack : {
+		armProps		: {
+			range0		: 80,
+			base		: 0,
+			range1		: 65,
+			offset		: 70
 		}
 	}
 }
