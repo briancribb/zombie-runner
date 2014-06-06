@@ -48,6 +48,27 @@ Runner = function(settings) {
 	this.moveType = this.moveProps[ settings.moveType ] || this.moveProps['run'];
 	this.x = settings.x;
 	this.y = settings.y;
+
+
+	this.torsoAngle		= -(Math.PI/180)*70;
+	this.headOffset		= (Math.PI/180)*15;
+	this.shoulderSlide	= 8;
+	this.legProps		= {
+		range0		: 55,
+		base		: 90,
+		range1		: 45,
+		offset		: -1.57,
+		jump		: 15
+	};
+	this.armProps		= {
+		range0		: 80,
+		base		: 90,
+		range1		: 35,
+		offset		: 60
+	};
+}
+Runner.prototype.updateMoveProp = function (targetProp, currentProp) {
+	// this.movetype[targetProp], this[currentProp]
 }
 
 
