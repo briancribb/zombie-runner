@@ -1,9 +1,6 @@
 var classes = classes || {}; // Giving a namespace to the class we're creating. It keeps things out of global.
 
 Runner = function(settings) {
-
-
-
 	this.counter = 0;
 	this.speed = settings.speed || 8;
 	this.gravity = settings.gravity || 1;
@@ -46,6 +43,7 @@ Runner = function(settings) {
 	this.armFront1 = new Segment(this.armLength, this.armWidth, this.colorLight);
 
 	this.moveType = this.moveProps[ settings.moveType ] || this.moveProps['run'];
+	this.moveTarget = this.moveType;
 	this.x = settings.x;
 	this.y = settings.y;
 
@@ -66,11 +64,46 @@ Runner = function(settings) {
 		range1		: 35,
 		offset		: 60
 	};
-}
-Runner.prototype.updateMoveProp = function (targetProp, currentProp) {
-	// this.movetype[targetProp], this[currentProp]
+	this.init();
 }
 
+Runner.prototype.init = function () {
+	// Torso
+	this.torso.x = this.x;
+	this.torso.y = this.y - (this.legLength * 2) - (this.legWidth/2) + 2 - ( Math.sin(this.cycle*2) * this.moveType.legProps.jump );
+	this.torso.rotation = this.moveType.torsoAngle;
+
+	// Head
+	this.head.x = this.torso.getPin().x;
+	this.head.y = this.torso.getPin().y;
+	this.head.offset = this.moveType.headOffset;
+	this.head.rotation = this.torso.rotation + this.head.offset;
+
+	// Back Leg
+	this.legBack0.x = this.torso.x - this.hipSlide;
+	this.legBack0.y = this.torso.y;
+	this.legBack1.x = this.legBack0.getPin().x;
+	this.legBack1.y = this.legBack0.getPin().y;
+
+	// Front Leg
+	this.legFront0.x = this.torso.x + this.hipSlide;
+	this.legFront0.y = this.torso.y;
+	this.legFront1.x = this.legFront0.getPin().x;
+	this.legFront1.y = this.legFront0.getPin().y;
+
+	// Back arm
+	this.armBack0.x = this.torso.getPin().x + this.shoulderSlide;
+	this.armBack0.y = this.torso.getPin().y;
+	this.armBack1.x = this.armBack0.getPin().x;
+	this.armBack1.y = this.armBack0.getPin().y;
+
+	// Front arm
+	this.armFront0.x = this.torso.getPin().x - this.shoulderSlide;
+	this.armFront0.y = this.torso.getPin().y;
+	this.armFront1.x = this.armFront0.getPin().x - this.shoulderSlide;
+	this.armFront1.y = this.armFront0.getPin().y;
+
+}
 
 Runner.prototype.run = function (elapsed) {
 	this.lastCycle = this.cycle;
@@ -78,30 +111,22 @@ Runner.prototype.run = function (elapsed) {
 	this.shoulderSlide = (Math.sin(this.cycle) * (this.moveType.shoulderSlide) );
 
 	this.counter ++;
-	if (this.counter < 300) {
+	if (this.counter < 100) {
 		var cycleWave = Math.sin(this.cycle);
 		var lastCycleWave = Math.sin(this.lastCycle);
 
 		if (cycleWave > lastCycleWave && this.sinDirection === false) {
-			console.log('Going UP: lastCycleWave: ' + lastCycleWave + ', cycleWave: ' + cycleWave + ', this.counter: ' + this.counter);
+			//console.log('Bottom, going UP: lastCycleWave: ' + lastCycleWave + ', cycleWave: ' + cycleWave + ', this.counter: ' + this.counter);
 			this.sinDirection = true;
-			checkNewRotation(this.counter);
 			this.counter ++;
 		} else if (cycleWave < lastCycleWave && this.sinDirection === true) {
-			console.log('Going DOWN: lastCycleWave: ' + lastCycleWave + ', cycleWave: ' + cycleWave + ', this.counter: ' + this.counter);
+			//console.log('Top, going DOWN: lastCycleWave: ' + lastCycleWave + ', cycleWave: ' + cycleWave + ', this.counter: ' + this.counter);
 			this.sinDirection = false;
-			//checkNewRotation(this.counter);
 			//this.counter ++;
 		}
-
-	}
-
-	function checkNewRotation(counter) {
-		if ( counter % 2 === 0) {
-			console.log("-- Multiple of two. We're in a new rotational cycle.");
-		} else {
-			console.log("-- Same rotational cycle");
-		}
+		console.log('updateSet()');
+		console.log( updateSet(this.moveType, this.moveTarget) );
+		console.log(' ');
 	}
 
 	// Torso
@@ -139,7 +164,6 @@ Runner.prototype.run = function (elapsed) {
 	//moveArm(this.armFront0, this.armFront1, this.cycle, this.moveProps.reachBack.armProps);
 	moveArm(this.armFront0, this.armFront1, this.cycle, armSet);
 
-
 	function moveLeg(segA, segB, cyc, set) {
 		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
 			angle1 = (Math.sin(cyc + set.offset) * set.range1 + set.range1) * Math.PI / 180,
@@ -151,14 +175,24 @@ Runner.prototype.run = function (elapsed) {
 	}
 
 	function moveArm(segA, segB, cyc, set) {
-
 		var angle0 = (Math.sin(cyc) * set.range0 + set.base) * Math.PI / 180,
 			angle1 = ( (Math.sin(cyc) * set.range1) - set.offset) * Math.PI / 180;
-
 		segA.rotation = angle0;
 		segB.rotation = segA.rotation + angle1;
 		segB.x = segA.getPin().x;
 		segB.y = segA.getPin().y;
+	}
+
+	function updateSet(currentSet, targetSet) {
+		/*
+		console.log('currentSet:');
+		console.log(currentSet);
+		console.log(' ');
+		console.log('targetSet:');
+		console.log(targetSet);
+		console.log(' ');
+		*/
+		return currentSet;
 	}
 }
  
@@ -177,8 +211,8 @@ Runner.prototype.draw = function (context) {
 
 Runner.prototype.moveProps = {
 	run : {
-		torsoAngle		: -(Math.PI/180)*70,
-		headOffset		: (Math.PI/180)*15,
+		torsoAngle		: -70,
+		headOffset		: 15,
 		shoulderSlide	: 8,
 		legProps		: {
 			range0		: 55,
@@ -195,8 +229,8 @@ Runner.prototype.moveProps = {
 		}
 	},
 	run2 : {
-		torsoAngle		: -(Math.PI/180)*85,
-		headOffset		: (Math.PI/180)*8,
+		torsoAngle		: -85,
+		headOffset		: 8,
 		shoulderSlide	: 4,
 		legProps		: {
 			range0		: 40,
@@ -213,8 +247,8 @@ Runner.prototype.moveProps = {
 		}
 	},
 	zombie : {
-		torsoAngle		: -(Math.PI/180)*80,
-		headOffset		: (Math.PI/180)*15,
+		torsoAngle		: -80,
+		headOffset		: 15,
 		shoulderSlide	: 1,
 		legProps		: {
 			range0		: 15,

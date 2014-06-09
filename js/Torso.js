@@ -16,7 +16,7 @@ function Torso (tallness, waist, color, torsoType) {
 Torso.prototype.draw = function (context) {
 	context.save();
 	context.translate(this.x, this.y);
-	context.rotate(this.rotation);
+	context.rotate( (Math.PI/180)*this.rotation );
 	context.scale(this.scaleX, this.scaleY);
 	context.lineWidth = self.waist;
 	context.strokeStyle = self.color;
@@ -29,8 +29,8 @@ Torso.prototype.draw = function (context) {
 
 Torso.prototype.getPin = function () {
 	return {
-		x: this.x + Math.cos(this.rotation) * this.tallness,
-		y: this.y + Math.sin(this.rotation) * this.tallness
+		x: this.x + Math.cos( (Math.PI/180)*this.rotation ) * this.tallness,
+		y: this.y + Math.sin( (Math.PI/180)*this.rotation ) * this.tallness
 	};
 };
 

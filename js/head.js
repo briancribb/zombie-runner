@@ -22,7 +22,7 @@ Head.prototype.draw = function (context) {
 
 	//Setup
 	context.translate(self.x, self.y);
-	context.rotate(self.rotation);
+	context.rotate( (Math.PI/180)*this.rotation );
 	context.lineradius = self.lineradius;
 	context.fillStyle = self.color;
 	context.strokeStyle = '#000000';
@@ -37,7 +37,7 @@ Head.prototype.draw = function (context) {
 		// Head, including extra art.
 		context.save();
 			context.translate(self.neck, 0);
-			context.rotate(-self.rotation);
+			context.rotate( -(Math.PI/180)*this.rotation );
 
 			this.headTypes[this.headType](self, context);
 
