@@ -3,7 +3,6 @@ var classes = classes || {}; // Giving a namespace to the class we're creating. 
 Runner = function(settings) {
 	this.counter = 0;
 	this.speed = settings.speed || 8;
-	this.gravity = settings.gravity || 1;
 	this.floor = settings.y; // the y value is where you want the feet to end up.
 	this.cycle = settings.cycle || 0;
 	this.lastCycle = 0;
@@ -18,10 +17,9 @@ Runner = function(settings) {
 	this.armWidth = settings.armWidth || 15;
 	this.legLength = settings.legLength || 50;
 	this.legWidth = settings.legWidth || 20;
-	this.shoulderSlide = settings.shoulderSlide || 0;
-	this.hipSlide = settings.hipSlide || 0;
 	this.color = settings.color || "rgb(119,119,119)";
 	this.reachBack = this.reaching = false;
+
 
 	// Only works with rgb. Needs adjustment for rgba.
 	var colorComponents = this.color.substring(4, this.color.length-1).replace(/ /g, '').split(',');
@@ -44,26 +42,12 @@ Runner = function(settings) {
 
 	this.moveType = this.moveProps[ settings.moveType ] || this.moveProps['run'];
 	this.moveTarget = this.moveType;
+	this.moveSet = this.moveType;
+
+
 	this.x = settings.x;
 	this.y = settings.y;
 
-
-	this.torsoAngle		= -(Math.PI/180)*70;
-	this.headOffset		= (Math.PI/180)*15;
-	this.shoulderSlide	= 8;
-	this.legProps		= {
-		range0		: 55,
-		base		: 90,
-		range1		: 45,
-		offset		: -1.57,
-		jump		: 15
-	};
-	this.armProps		= {
-		range0		: 80,
-		base		: 90,
-		range1		: 35,
-		offset		: 60
-	};
 	this.init();
 }
 
@@ -80,13 +64,13 @@ Runner.prototype.init = function () {
 	this.head.rotation = this.torso.rotation + this.head.offset;
 
 	// Back Leg
-	this.legBack0.x = this.torso.x - this.hipSlide;
+	this.legBack0.x = this.torso.x;
 	this.legBack0.y = this.torso.y;
 	this.legBack1.x = this.legBack0.getPin().x;
 	this.legBack1.y = this.legBack0.getPin().y;
 
 	// Front Leg
-	this.legFront0.x = this.torso.x + this.hipSlide;
+	this.legFront0.x = this.torso.x;
 	this.legFront0.y = this.torso.y;
 	this.legFront1.x = this.legFront0.getPin().x;
 	this.legFront1.y = this.legFront0.getPin().y;
@@ -141,12 +125,12 @@ Runner.prototype.run = function (elapsed) {
 	this.head.rotation = this.torso.rotation + this.head.offset;
 
 	// Back Leg
-	this.legBack0.x = this.torso.x - this.hipSlide;
+	this.legBack0.x = this.torso.x;
 	this.legBack0.y = this.torso.y;
 	moveLeg(this.legBack0, this.legBack1, this.cycle, this.moveType.legProps);
 
 	// Front Leg
-	this.legFront0.x = this.torso.x + this.hipSlide;
+	this.legFront0.x = this.torso.x;
 	this.legFront0.y = this.torso.y;
 	moveLeg(this.legFront0, this.legFront1, this.cycle + Math.PI, this.moveType.legProps);
 

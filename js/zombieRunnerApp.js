@@ -19,8 +19,7 @@ var zombieRunnerApp = function(){
 	// Variables
 	var canvas = document.getElementById("zombieRunner");
 	self.props = {
-		floor : canvas.height,
-		gravity :5
+		floor : canvas.height
 	};
 
 	var context = canvas.getContext("2d"),
@@ -43,7 +42,6 @@ var zombieRunnerApp = function(){
 			armWidth : 15,
 			legLength : 40,
 			legWidth : 20,
-			gravity : self.props.gravity,
 			cycle : 2,
 			speed : 6,
 			moveType : 'zombie'
@@ -55,7 +53,6 @@ var zombieRunnerApp = function(){
 			headSize : 26,
 			headType : 'operator',
 			neck : 24,
-			gravity : self.props.gravity,
 			moveType : 'run',
 			armWidth : 13,
 			armLength : 28,
