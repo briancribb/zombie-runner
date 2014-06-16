@@ -40,9 +40,9 @@ Runner = function(settings) {
 	this.armFront0 = new Segment(this.armLength, this.armWidth, this.colorLight),
 	this.armFront1 = new Segment(this.armLength, this.armWidth, this.colorLight);
 
-	this.moveType = this.moveProps[ settings.moveType ] || this.moveProps['run'];
-	this.moveTarget = this.moveType;
-	this.moveSet = this.moveType;
+	this.moveSet = this.moveProps[ settings.moveSet ] || this.moveProps['run'];
+	this.moveTarget = this.moveSet;
+	this.moveOrigin = this.moveSet;
 
 
 	this.x = settings.x;
@@ -54,13 +54,13 @@ Runner = function(settings) {
 Runner.prototype.init = function () {
 	// Torso
 	this.torso.x = this.x;
-	this.torso.y = this.y - (this.legLength * 2) - (this.legWidth/2) + 2 - ( Math.sin(this.cycle*2) * this.moveType.legProps.jump );
-	this.torso.rotation = this.moveType.torsoAngle;
+	this.torso.y = this.y - (this.legLength * 2) - (this.legWidth/2) + 2 - ( Math.sin(this.cycle*2) * this.moveSet.legProps.jump );
+	this.torso.rotation = this.moveSet.torsoAngle;
 
 	// Head
 	this.head.x = this.torso.getPin().x;
 	this.head.y = this.torso.getPin().y;
-	this.head.offset = this.moveType.headOffset;
+	this.head.offset = this.moveSet.headOffset;
 	this.head.rotation = this.torso.rotation + this.head.offset;
 
 	// Back Leg
@@ -92,7 +92,7 @@ Runner.prototype.init = function () {
 Runner.prototype.run = function (elapsed) {
 	this.lastCycle = this.cycle;
 	this.cycle += this.speed * (elapsed/1000);
-	this.shoulderSlide = (Math.sin(this.cycle) * (this.moveType.shoulderSlide) );
+	this.shoulderSlide = (Math.sin(this.cycle) * (this.moveSet.shoulderSlide) );
 
 	this.counter ++;
 	if (this.counter < 100) {
@@ -108,43 +108,44 @@ Runner.prototype.run = function (elapsed) {
 			this.sinDirection = false;
 			//this.counter ++;
 		}
-		console.log('updateSet()');
-		console.log( updateSet(this.moveType, this.moveTarget) );
-		console.log(' ');
+		updateSet(  updateSet(this.moveSet, this.moveTarget, this.moveOrigin) );
+		//console.log('updateSet()');
+		//console.log( updateSet(this.moveSet, this.moveTarget, this.moveOrigin) );
+		//console.log(' ');
 	}
 
 	// Torso
 	this.torso.x = this.x;
-	this.torso.y = this.y - (this.legLength * 2) - (this.legWidth/2) + 2 - ( Math.sin(this.cycle*2) * this.moveType.legProps.jump );
-	this.torso.rotation = this.moveType.torsoAngle;
+	this.torso.y = this.y - (this.legLength * 2) - (this.legWidth/2) + 2 - ( Math.sin(this.cycle*2) * this.moveSet.legProps.jump );
+	this.torso.rotation = this.moveSet.torsoAngle;
 
 	// Head
 	this.head.x = this.torso.getPin().x;
 	this.head.y = this.torso.getPin().y;
-	this.head.offset = this.moveType.headOffset;
+	this.head.offset = this.moveSet.headOffset;
 	this.head.rotation = this.torso.rotation + this.head.offset;
 
 	// Back Leg
 	this.legBack0.x = this.torso.x;
 	this.legBack0.y = this.torso.y;
-	moveLeg(this.legBack0, this.legBack1, this.cycle, this.moveType.legProps);
+	moveLeg(this.legBack0, this.legBack1, this.cycle, this.moveSet.legProps);
 
 	// Front Leg
 	this.legFront0.x = this.torso.x;
 	this.legFront0.y = this.torso.y;
-	moveLeg(this.legFront0, this.legFront1, this.cycle + Math.PI, this.moveType.legProps);
+	moveLeg(this.legFront0, this.legFront1, this.cycle + Math.PI, this.moveSet.legProps);
 
 	// Back arm
 	this.armBack0.x = this.torso.getPin().x + this.shoulderSlide;
 	this.armBack0.y = this.torso.getPin().y;
-	moveArm(this.armBack0, this.armBack1, this.cycle + Math.PI, this.moveType.armProps);
+	moveArm(this.armBack0, this.armBack1, this.cycle + Math.PI, this.moveSet.armProps);
 
 	// Front arm
 	this.armFront0.x = this.torso.getPin().x - this.shoulderSlide;
 	this.armFront0.y = this.torso.getPin().y;
 
-	//var armSet =  this.moveType.armProps;
-	var armSet = (this.reachBack === true ? this.moveProps.reachBack.armProps : this.moveType.armProps);
+	//var armSet =  this.moveSet.armProps;
+	var armSet = (this.reachBack === true ? this.moveProps.reachBack.armProps : this.moveSet.armProps);
 	//moveArm(this.armFront0, this.armFront1, this.cycle, this.moveProps.reachBack.armProps);
 	moveArm(this.armFront0, this.armFront1, this.cycle, armSet);
 
@@ -167,15 +168,18 @@ Runner.prototype.run = function (elapsed) {
 		segB.y = segA.getPin().y;
 	}
 
-	function updateSet(currentSet, targetSet) {
-		/*
+	function updateSet(currentSet, originSet, targetSet) {
+
 		console.log('currentSet:');
 		console.log(currentSet);
+		console.log(' ');
+		console.log('originSet:');
+		console.log(originSet);
 		console.log(' ');
 		console.log('targetSet:');
 		console.log(targetSet);
 		console.log(' ');
-		*/
+
 		return currentSet;
 	}
 }

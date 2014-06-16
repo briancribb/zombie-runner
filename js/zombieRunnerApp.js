@@ -44,7 +44,7 @@ var zombieRunnerApp = function(){
 			legWidth : 20,
 			cycle : 2,
 			speed : 6,
-			moveType : 'zombie'
+			moveSet : 'zombie'
 		});
 		runner6 = new Runner({
 			color: 'rgb(209,90,90)',
@@ -53,7 +53,7 @@ var zombieRunnerApp = function(){
 			headSize : 26,
 			headType : 'operator',
 			neck : 24,
-			moveType : 'run',
+			moveSet : 'run',
 			armWidth : 13,
 			armLength : 28,
 			legWidth : 15,
@@ -67,7 +67,7 @@ var zombieRunnerApp = function(){
 			color: 'rgb(100,173,245)',
 			x:500,
 			y:self.props.floor,
-			moveType : 'run2',
+			moveSet : 'run2',
 			speed: 7
 		});
 
